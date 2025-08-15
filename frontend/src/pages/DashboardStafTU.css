@@ -1,0 +1,44 @@
+/* frontend/src/pages/DashboardStafTU.css */
+
+.dashboard-staf-tu-container {
+    padding: 20px;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.dashboard-staf-tu-container h2 {
+    color: #005936;
+    margin-bottom: 20px;
+}
+
+.summary-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-basis: 250px;
+    text-align: center;
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #005936;
+    font-size: 1.2rem;
+}
+
+.card p {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 10px 0 0;
+}
+
+.monitoring-section {
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}

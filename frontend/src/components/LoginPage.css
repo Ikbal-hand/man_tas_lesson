@@ -1,0 +1,77 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5; /* Abu-abu terang untuk latar belakang */
+    font-family: Arial, sans-serif;
+}
+
+.login-form {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-form h1 {
+    color: #005936; /* Hijau Tua */
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333333;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #005936; /* Hijau Tua */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #004d2e; /* Hijau yang sedikit lebih gelap saat di-hover */
+}
+
+.error-message {
+    color: red;
+    margin-top: 1rem;
+}
+.login-form {
+    /* ... */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Menyelaraskan logo dan judul di tengah */
+}
+
+.login-logo {
+    width: 100px; /* Sesuaikan ukuran logo */
+    height: auto;
+    margin-bottom: 20px;
+}

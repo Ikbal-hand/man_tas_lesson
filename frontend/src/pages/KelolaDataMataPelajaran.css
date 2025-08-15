@@ -1,0 +1,124 @@
+/* frontend/src/pages/KelolaDataMataPelajaran.css */
+
+.kelola-data-mapel-container {
+    padding: 20px;
+}
+
+.kelola-data-mapel-container h2 {
+    color: #005936;
+    margin-bottom: 20px;
+}
+
+.mapel-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mapel-table thead {
+    background-color: #005936;
+    color: #ffffff;
+}
+
+.mapel-table th, .mapel-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #dddddd;
+}
+
+.mapel-table tbody tr:nth-child(even) {
+    background-color: #f3f3f3;
+}
+
+.mapel-table tbody tr:hover {
+    background-color: #e2e2e2;
+}
+
+.mapel-table button {
+    margin-right: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+.mapel-table .edit-button {
+    background-color: #66BB6A;
+}
+
+.mapel-table .delete-button {
+    background-color: #e74c3c;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-button {
+    padding: 10px 15px;
+    background-color: #005936;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: #004d2e;
+}
+
+.mapel-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.mapel-form h3 {
+    color: #005936;
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.submit-button, .cancel-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.submit-button {
+    background-color: #005936;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #ccc;
+    color: #333;
+}

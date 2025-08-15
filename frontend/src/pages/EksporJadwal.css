@@ -1,0 +1,100 @@
+/* frontend/src/pages/EksporJadwal.css */
+
+.ekspor-jadwal-container {
+    padding: 20px;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.ekspor-jadwal-container h2 {
+    color: #005936;
+    margin: 0; /* Hapus margin bawah */
+}
+
+.export-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* Tambahkan margin bawah */
+}
+
+.filter-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-group select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.export-button {
+    padding: 12px 20px;
+    background-color: #005936;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.export-button:hover:not(:disabled) {
+    background-color: #004d2e;
+}
+
+.export-button:disabled {
+    background-color: #b3b3b3;
+    cursor: not-allowed;
+}
+
+.preview-table-container {
+    margin-top: 30px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.preview-table-container h3 {
+    margin-top: 0;
+    color: #005936;
+}
+
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.preview-table th, .preview-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.preview-table thead {
+    background-color: #f2f2f2;
+}
+
+.preview-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
