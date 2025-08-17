@@ -1,0 +1,63 @@
+/* src/components/JadwalPrintView.css */
+
+.print-view-container {
+    margin-bottom: 30px;
+    page-break-before: always;
+}
+
+.print-view-container:first-child {
+    page-break-before: auto;
+}
+
+.print-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* --- PERUBAHAN: Font diperbesar sedikit untuk keterbacaan --- */
+    font-size: 10px; 
+    table-layout: fixed; /* Penting untuk mengontrol lebar kolom */
+}
+
+.print-table th, 
+.print-table td {
+    border: 1px solid #ccc;
+    padding: 6px 5px; /* Padding disesuaikan */
+    text-align: center;
+    vertical-align: middle;
+    /* Mengizinkan teks untuk patah jika diperlukan */
+    word-wrap: break-word; 
+}
+
+.print-table thead th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.print-table thead th small {
+    font-weight: normal;
+    font-size: 9px;
+}
+
+/* --- PERUBAHAN: Kolom Kelas dibuat lebih kecil dan tetap --- */
+.print-table .class-column {
+    width: 70px; /* Lebar tetap yang lebih kecil */
+    font-size: 11px;
+}
+
+/* --- PERUBAHAN: Kolom Jam Pelajaran dibiarkan otomatis --- */
+.print-table .hour-column {
+    /* Properti 'width' dihapus agar lebarnya fleksibel */
+}
+
+.print-cell-content {
+    line-height: 1.4;
+}
+
+.print-cell-content span {
+    font-weight: 500;
+}
+
+.print-cell-content small {
+    color: #555;
+    display: block;
+}

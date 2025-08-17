@@ -1,0 +1,187 @@
+/* frontend/src/pages/KelolaJadwal.css */
+
+.kelola-jadwal-container {
+    padding: 24px;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.add-button.secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.add-button.secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.jadwal-selectors {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.jadwal-tabs button {
+    padding: 8px 16px;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.jadwal-tabs button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.jadwal-table-container {
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.jadwal-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+}
+
+.jadwal-table th, .jadwal-table td {
+    border: 1px solid #dee2e6;
+    padding: 12px;
+    text-align: center;
+}
+
+.jadwal-table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #aaa;
+    font-size: 20px;
+    width: 50px;
+}
+
+.special-row {
+    background-color: #f3f4f6;
+}
+
+.activity-placeholder {
+    font-weight: bold;
+    color: #4b5563;
+}
+
+.editable-time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editable-time span {
+    cursor: pointer;
+}
+.editable-time span:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.delete-row-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+.delete-row-button:hover {
+    opacity: 1;
+    color: #dc3545;
+}
+
+.time-edit-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.time-edit-cell .save-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.time-edit-cell .save-button:hover {
+    background-color: #218838;
+}
+
+.jadwal-cell {
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s ease;
+    vertical-align: middle;
+    min-width: 100px;
+}
+
+.jadwal-cell:hover {
+    background-color: #e9f5ff;
+}
+
+.cell-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    padding: 5px;
+    min-height: 50px;
+}
+
+.cell-content small {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.3;
+}
+
+.form-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.jadwal-form {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    width: 400px;
+}

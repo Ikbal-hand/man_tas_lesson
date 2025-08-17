@@ -1,0 +1,28 @@
+/* frontend/src/components/JadwalBerikutnya.css */
+.countdown-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.countdown-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6c757d;
+    margin: 0 0 8px 0;
+}
+.countdown-timer {
+    font-size: 28px;
+    font-weight: 700;
+    color: #005936; /* Warna primer hijau */
+    margin-bottom: 16px;
+}
+.countdown-details p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #343a40;
+}
+.no-schedule-info {
+    color: #6c757d;
+    font-style: italic;
+}

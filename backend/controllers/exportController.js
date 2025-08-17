@@ -2,38 +2,38 @@
 const db = require('../config/db');
 const ExcelJS = require('exceljs');
 
-// Fungsi untuk mendapatkan data jadwal dari database.
-// Kita akan menggunakan ini untuk pratinjau dan ekspor.
 const getJadwalData = (guru, hari, kelas) => {
     return new Promise((resolve, reject) => {
         let sql = `
             SELECT
-                jadwal.hari, jadwal.jam_mulai, jadwal.jam_selesai, jadwal.jam_ke,
-                guru.nama AS nama_guru,
-                kelas.nama_kelas,
-                mata_pelajaran.nama_mapel
+                j.hari, j.jam_mulai, j.jam_selesai, j.jam_ke,
+                g.nama AS nama_guru,
+                k.nama_kelas,
+                mp.nama_mapel
             FROM
-                jadwal
+                jadwal j
             JOIN
-                guru ON jadwal.id_guru = guru.id
+                penugasan_guru pg ON j.id_penugasan = pg.id
             JOIN
-                kelas ON jadwal.id_kelas = kelas.id
+                guru g ON pg.id_guru = g.id
             JOIN
-                mata_pelajaran ON jadwal.id_mata_pelajaran = mata_pelajaran.id
+                kelas k ON pg.id_kelas = k.id
+            JOIN
+                mata_pelajaran mp ON pg.id_mata_pelajaran = mp.id
             WHERE 1=1
         `;
         const params = [];
 
         if (guru) {
-            sql += ' AND guru.nama = ?';
+            sql += ' AND g.nama = ?';
             params.push(guru);
         }
         if (hari) {
-            sql += ' AND jadwal.hari = ?';
+            sql += ' AND j.hari = ?';
             params.push(hari);
         }
         if (kelas) {
-            sql += ' AND kelas.nama_kelas = ?';
+            sql += ' AND k.nama_kelas = ?';
             params.push(kelas);
         }
 
@@ -44,7 +44,6 @@ const getJadwalData = (guru, hari, kelas) => {
     });
 };
 
-// Fungsi untuk mengekspor data ke Excel
 exports.exportJadwal = async (req, res) => {
     try {
         const { guru, hari, kelas } = req.query;
@@ -83,14 +82,13 @@ exports.exportJadwal = async (req, res) => {
     }
 };
 
-// Fungsi untuk pratinjau data (mengembalikan JSON)
 exports.previewJadwal = async (req, res) => {
     try {
         const { guru, hari, kelas } = req.query;
         const results = await getJadwalData(guru, hari, kelas);
         res.status(200).json(results);
-    } catch (error) {
-        console.error('Error fetching preview jadwal:', error);
-        res.status(500).json({ error: error.message });
+    } catch (e) {
+        console.error('Error fetching preview jadwal:', e);
+        res.status(500).json({ error: e.message });
     }
 };

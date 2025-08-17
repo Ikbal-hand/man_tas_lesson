@@ -1,77 +1,109 @@
-.login-container {
+/* frontend/src/components/LoginPage.css */
+
+:root {
+    --primary-green: #005936;
+    --background-light: #f8f9fa;
+    --text-dark: #212529;
+    --text-light: #6c757d;
+    --border-color: #dee2e6;
+    --error-color: #dc3545;
+}
+
+.login-page-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5; /* Abu-abu terang untuk latar belakang */
-    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background-color: var(--background-light);
+    font-family: 'Inter', sans-serif;
 }
 
 .login-form {
     background-color: #ffffff;
-    padding: 2.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     width: 100%;
     max-width: 400px;
     text-align: center;
 }
 
-.login-form h1 {
-    color: #005936; /* Hijau Tua */
-    margin-bottom: 2rem;
-    font-size: 1.5rem;
+.login-logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.login-header h1 {
+    font-size: 24px;
+    color: var(--text-dark);
+    font-weight: 600;
+    margin: 0;
+}
+
+.login-header p {
+    font-size: 16px;
+    color: var(--text-light);
+    margin: 4px 0 24px 0;
 }
 
 .input-group {
+    margin-bottom: 20px;
     text-align: left;
-    margin-bottom: 1.5rem;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 0.5rem;
-    color: #333333;
-    font-weight: bold;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 14px;
 }
 
 .input-group input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box; /* Penting agar padding tidak menambah lebar */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(0, 89, 54, 0.1);
 }
 
 .login-button {
     width: 100%;
-    padding: 12px;
-    background-color: #005936; /* Hijau Tua */
-    color: #ffffff;
+    padding: 14px;
     border: none;
-    border-radius: 4px;
-    font-size: 1.1rem;
+    border-radius: 8px;
+    background-color: var(--primary-green);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s;
 }
 
 .login-button:hover {
-    background-color: #004d2e; /* Hijau yang sedikit lebih gelap saat di-hover */
+    background-color: #004d2e;
+}
+
+.login-button:disabled {
+    background-color: #a3b1a9;
+    cursor: not-allowed;
 }
 
 .error-message {
-    color: red;
-    margin-top: 1rem;
-}
-.login-form {
-    /* ... */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Menyelaraskan logo dan judul di tengah */
-}
-
-.login-logo {
-    width: 100px; /* Sesuaikan ukuran logo */
-    height: auto;
+    color: var(--error-color);
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 0;
     margin-bottom: 20px;
 }

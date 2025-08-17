@@ -1,44 +1,107 @@
 /* frontend/src/pages/DashboardStafTU.css */
 
-.dashboard-staf-tu-container {
-    padding: 20px;
-    animation: fadeIn 0.5s ease-in-out forwards;
+/* Definisikan variabel warna untuk konsistensi */
+:root {
+    --primary-color: #005936;
+    --background-color: #f4f7f6;
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
-.dashboard-staf-tu-container h2 {
-    color: #005936;
-    margin-bottom: 20px;
+.dashboard-staf-tu-container {
+    padding: 24px;
+    background-color: var(--background-color);
+}
+
+/* --- BARU: Layout utama menggunakan CSS Grid --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 kolom sama lebar */
+    grid-template-areas:
+        "summary summary realtime"
+        "monitoring monitoring realtime";
+    gap: 24px;
 }
 
 .summary-cards {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
+    grid-area: summary;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
 }
 
+.realtime-info-widget {
+    grid-area: realtime;
+}
+
+.monitoring-section-widget {
+    grid-area: monitoring;
+}
+
+/* --- BARU: Desain kartu yang lebih modern --- */
 .card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex-basis: 250px;
-    text-align: center;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card h3 {
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card-icon {
+    padding: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+/* Warna ikon yang berbeda untuk setiap kartu */
+.card-guru .card-icon { background: linear-gradient(45deg, #2a9d8f, #264653); }
+.card-kelas .card-icon { background: linear-gradient(45deg, #f4a261, #e76f51); }
+.card-mapel .card-icon { background: linear-gradient(45deg, #8ecae6, #219ebc); }
+
+.card-content h3 {
     margin-top: 0;
-    color: #005936;
-    font-size: 1.2rem;
+    margin-bottom: 4px;
+    color: #6c757d;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
-.card p {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 10px 0 0;
+.card-content p {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #212529;
 }
 
-.monitoring-section {
-    padding-top: 20px;
-    border-top: 1px solid #e0e0e0;
+/* Styling untuk widget lain agar konsisten */
+.realtime-info-widget,
+.monitoring-section-widget {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+}
+
+/* Responsif untuk layar lebih kecil */
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "summary"
+            "realtime"
+            "monitoring";
+    }
+    .summary-cards {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 }

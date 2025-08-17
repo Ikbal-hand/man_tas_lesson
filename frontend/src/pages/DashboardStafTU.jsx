@@ -1,9 +1,11 @@
 // frontend/src/pages/DashboardStafTU.jsx
 
 import React, { useState, useEffect } from 'react';
+// --- BARU: Impor ikon dari react-icons ---
+import { FaChalkboardTeacher, FaSchool, FaBook } from 'react-icons/fa'; 
 import './DashboardStafTU.css';
 import GuruMengajar from './GuruMengajar';
-import RealtimeInfo from './RealtimeInfo'; // Import komponen RealtimeInfo
+import RealtimeInfo from './RealtimeInfo';
 
 const DashboardStafTU = () => {
     const [summary, setSummary] = useState({ gurus: 0, classes: 0, subjects: 0 });
@@ -18,7 +20,9 @@ const DashboardStafTU = () => {
                     fetch('http://localhost:3001/api/kelas'),
                     fetch('http://localhost:3001/api/mata-pelajaran'),
                 ]);
-
+                if (!gurusRes.ok || !classesRes.ok || !subjectsRes.ok) {
+                    throw new Error('Gagal mengambil data ringkasan.');
+                }
                 const gurusData = await gurusRes.json();
                 const classesData = await classesRes.json();
                 const subjectsData = await subjectsRes.json();
@@ -29,7 +33,7 @@ const DashboardStafTU = () => {
                     subjects: subjectsData.length,
                 });
             } catch (e) {
-                setError('Failed to fetch summary data.');
+                setError(e.message);
             } finally {
                 setLoading(false);
             }
@@ -38,37 +42,52 @@ const DashboardStafTU = () => {
         fetchSummary();
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    if (loading) return <div className="loading-container">Memuat Dashboard...</div>;
+    if (error) return <div className="error-container">Error: {error}</div>;
 
     return (
         <div className="dashboard-staf-tu-container fade-in">
-            {/* Tambahkan komponen realtime di sini */}
-            <RealtimeInfo />
-            
-            <h2>Ringkasan Data</h2>
-            <div className="summary-cards">
-                <div className="card">
-                    <h3>Total Guru</h3>
-                    <p>{summary.gurus}</p>
+            {/* --- PERUBAHAN: Struktur baru menggunakan CSS Grid --- */}
+            <div className="dashboard-grid">
+                
+                <div className="summary-cards">
+                    <div className="card card-guru">
+                        <div className="card-icon">
+                            <FaChalkboardTeacher size={32} />
+                        </div>
+                        <div className="card-content">
+                            <h3>Total Guru</h3>
+                            <p>{summary.gurus}</p>
+                        </div>
+                    </div>
+                    <div className="card card-kelas">
+                        <div className="card-icon">
+                            <FaSchool size={32} />
+                        </div>
+                        <div className="card-content">
+                            <h3>Total Kelas</h3>
+                            <p>{summary.classes}</p>
+                        </div>
+                    </div>
+                    <div className="card card-mapel">
+                        <div className="card-icon">
+                            <FaBook size={32} />
+                        </div>
+                        <div className="card-content">
+                            <h3>Total Mata Pelajaran</h3>
+                            <p>{summary.subjects}</p>
+                        </div>
+                    </div>
                 </div>
-                <div className="card">
-                    <h3>Total Kelas</h3>
-                    <p>{summary.classes}</p>
+
+                <div className="realtime-info-widget">
+                     <RealtimeInfo />
                 </div>
-                <div className="card">
-                    <h3>Total Mata Pelajaran</h3>
-                    <p>{summary.subjects}</p>
+                
+                <div className="monitoring-section-widget">
+                    <GuruMengajar />
                 </div>
-            </div>
-            
-            <div className="monitoring-section">
-                <GuruMengajar />
+
             </div>
         </div>
     );

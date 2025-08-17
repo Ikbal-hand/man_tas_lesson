@@ -1,48 +1,65 @@
 // frontend/src/components/LoginPage.jsx
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
-import logo from '../assets/image.png'; 
+import logo from '../assets/image.png'; // Pastikan path logo ini benar
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false); // State untuk loading
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Mencegah refresh halaman
         setError('');
+        setLoading(true); // Mulai loading
 
         try {
             const response = await fetch('http://localhost:3001/api/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
             });
 
             const data = await response.json();
 
             if (response.ok) {
+                // Simpan token atau info user jika ada, contoh:
+                // localStorage.setItem('userToken', data.token);
+
+                // Arahkan berdasarkan peran (role)
                 if (data.user.role === 'Staf TU') {
                     navigate('/staf-tu-dashboard');
+                } else if (data.user.role === 'Waka Kurikulum') {
+                    navigate('/waka-kurikulum-dashboard');
+                } else if (data.user.role === 'Kepala Sekolah') { // <-- PERBAIKAN: Menambahkan role Kepala Sekolah
+                    navigate('/kepala-sekolah-dashboard');
+                } else {
+                    setError('Peran pengguna tidak dikenali.');
                 }
-                // Anda bisa menambahkan kondisi lain untuk peran Waka Kurikulum dan Kepala Sekolah
             } else {
-                setError(data.message);
+                setError(data.message || 'Username atau password salah.');
             }
         } catch (err) {
-            setError('Terjadi kesalahan. Silakan coba lagi.');
+            setError('Tidak dapat terhubung ke server. Silakan coba lagi.');
+        } finally {
+            setLoading(false); // Selesai loading
         }
     };
 
     return (
-        <div className="login-container">
-            <form className="login-form">
-                <img src={logo} alt="Logo Aplikasi" className="login-logo" />
-                <h1>Sistem Monitoring Guru</h1>
+        <div className="login-page-container">
+            {/* PERBAIKAN: Menggunakan onSubmit pada form */}
+            <form className="login-form" onSubmit={handleLogin}>
+                <img src={logo} alt="Logo MAN 2 Tasikmalaya" className="login-logo" />
+                <div className="login-header">
+                    <h1>Sistem Monitoring Guru</h1>
+                    <p>MAN 2 TASIKMALAYA</p>
+                </div>
+                
                 <div className="input-group">
                     <label htmlFor="username">Username</label>
                     <input
@@ -50,9 +67,12 @@ const LoginPage = () => {
                         id="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Masukkan username"
                         required
+                        disabled={loading}
                     />
                 </div>
+                
                 <div className="input-group">
                     <label htmlFor="password">Password</label>
                     <input
@@ -60,11 +80,18 @@ const LoginPage = () => {
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Masukkan password"
                         required
+                        disabled={loading}
                     />
                 </div>
+                
                 {error && <p className="error-message">{error}</p>}
-                <button type="submit" onClick={handleLogin} className="login-button">Login</button>
+                
+                {/* PERBAIKAN: Tombol dinonaktifkan saat loading */}
+                <button type="submit" className="login-button" disabled={loading}>
+                    {loading ? 'Memproses...' : 'Login'}
+                </button>
             </form>
         </div>
     );

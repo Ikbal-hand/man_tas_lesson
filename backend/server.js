@@ -13,7 +13,9 @@ const userRoutes = require('./routes/userRoutes');
 const uploadController = require('./controllers/uploadController'); 
 const path = require('path');
 const exportRoutes = require('./routes/exportRoutes');
-const monitoringRoutes = require('./routes/monitoringRoutes'); // Import rute baru
+const monitoringRoutes = require('./routes/monitoringRoutes');
+const jadwalRoutes = require('./routes/jadwalRoutes');
+const penugasanRoutes = require('./routes/penugasanRoutes');
 
 const app = express();
 app.use(cors());
@@ -25,6 +27,8 @@ const upload = multer({ storage: storage });
 
 
 // Routes
+app.use('/api/penugasan', penugasanRoutes);
+app.use('/api/jadwal', jadwalRoutes);
 app.use('/api/monitoring', monitoringRoutes); 
 app.use('/api/templates', express.static(path.join(__dirname, 'templates')));
 app.use('/api/export', (req, res, next) => {
