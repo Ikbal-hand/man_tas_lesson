@@ -1,40 +1,109 @@
-# 🏫 Sistem Monitoring Guru MAN 2 TASIKMALAYA
+# Sistem Monitoring Guru - MAN 2 Tasikmalaya
 
-### Deskripsi Proyek
-Sistem Monitoring Guru adalah aplikasi web yang dirancang untuk membantu pihak sekolah dalam mengelola dan memantau kegiatan belajar mengajar. Aplikasi ini berfokus pada manajemen data guru, mata pelajaran, kelas, serta penjadwalan. Fitur utamanya adalah pemantauan real-time guru yang sedang mengajar, manajemen jadwal, dan ekspor data yang efisien.
+<div align="center">
+  <img src="frontend/src/assets/image.png" alt="Logo MAN 2 Tasikmalaya" width="120px"/>
+</div>
+<br>
 
-### Fitur Utama
+Sebuah aplikasi web yang dirancang untuk memonitoring aktivitas mengajar guru secara *real-time* di MAN 2 Tasikmalaya, serta menyediakan fitur manajemen jadwal yang komprehensif untuk Waka Kurikulum dan manajemen data master untuk Staf TU. [cite: 2, 3, 25]
 
-Aplikasi ini dibagi menjadi beberapa peran pengguna dengan fungsionalitas khusus:
+## Tampilan Aplikasi
 
-**1. Staf TU**
-* **Manajemen Data Master**: Mengelola data guru, mata pelajaran, dan kelas (tambah, edit, hapus, lihat).
-* **Manajemen Akun**: Membuat, mengedit, dan menghapus akun pengguna dengan peran yang berbeda.
-* **Unggah Data**: Memasukkan data master secara massal menggunakan file Excel.
-* **Ekspor Jadwal**: Mengunduh jadwal pelajaran dalam format Excel dengan filter kustom.
+Berikut adalah beberapa cuplikan tampilan dari aplikasi:
 
-**2. Waka Kurikulum**
-* **Manajemen Jadwal**: Membuat, mengedit, dan menghapus jadwal pelajaran.
-* **Deteksi Konflik**: Melihat dan menyelesaikan konflik jadwal mengajar.
+| Dashboard Kepala Sekolah | Kelola Jadwal (Waka Kurikulum) | Manajemen Data (Staf TU) |
+| :---: | :---: | :---: |
+| ![Dashboard Kepala Sekolah](image_d80c09.png) | ![Kelola Jadwal](image_fd1d7f.png) | ![Manajemen Data](image_0bfbd6.png) |
 
-**3. Kepala Sekolah**
-* **Monitoring Real-time**: Melihat guru yang sedang mengajar di kelas secara langsung.
-* **Melihat Jadwal**: Menampilkan jadwal pelajaran secara keseluruhan.
-* **Riwayat Jadwal**: Melihat riwayat jadwal mengajar.
+---
 
-### Teknologi
+## Fitur Utama
 
-Proyek ini dibangun dengan pendekatan monorepo yang memisahkan frontend dan backend:
+Aplikasi ini memiliki fungsionalitas yang terpisah berdasarkan tiga peran utama: **Staf TU**, **Waka Kurikulum**, dan **Kepala Sekolah**. [cite: 27]
 
--   **Frontend**: `React.js`
--   **Backend**: `Express.js`
--   **Database**: `MySQL`
+### 👤 **Staf TU (Administrator)**
+Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi. [cite: 57]
+- **Manajemen Data Guru** (Tambah, Edit, Hapus, Cari) [cite: 60]
+- **Manajemen Data Mata Pelajaran** (Tambah, Edit, Hapus, Cari) [cite: 60]
+- **Manajemen Data Kelas** (Tambah, Edit, Hapus, Cari, Filter per Tingkat) [cite: 60]
+- **Manajemen Akun Pengguna** (Tambah, Edit, Hapus, Cari) [cite: 60]
+- **Manajemen Penugasan Guru** (Menghubungkan Guru dengan Mata Pelajaran yang diampu)
+- **Unggah Data Massal** dari file Excel untuk data guru dan mata pelajaran. [cite: 60]
+- **Ekspor Jadwal** ke dalam format PDF dengan berbagai opsi tampilan. [cite: 60]
 
-### Instalasi
+### 👩‍🏫 **Waka Kurikulum (Moderator)**
+Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran. [cite: 57]
+- **Manajemen Multi-Jadwal** per Tahun Ajaran.
+- **Kelola Jadwal Interaktif** dengan *drag-and-drop*.
+- **Mode Pratinjau & Edit** untuk keamanan dan kemudahan penggunaan.
+- **Simpan Tata Letak Jadwal** (urutan baris & waktu kustom) per tahun ajaran.
+- **Fitur "Kosongkan Jadwal"** per kelas untuk pembersihan cepat.
+- **Deteksi Konflik Jadwal** untuk mengidentifikasi jadwal yang tumpang tindih. [cite: 64]
+- **Manajemen Penugasan** untuk mengatur guru mana yang mengajar mata pelajaran apa.
 
-Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah berikut:
+### 👨‍💼 **Kepala Sekolah (Monitoring)**
+Menggunakan aplikasi untuk kebutuhan monitoring guru dan jadwal secara keseluruhan. [cite: 57]
+- **Dashboard Monitoring Real-time** untuk melihat guru yang sedang mengajar saat ini. [cite: 64]
+- **Widget Hitung Mundur** untuk jadwal pelajaran berikutnya.
+- **Melihat Jadwal Pelajaran** dengan tampilan daftar yang mudah dibaca dan difilter. [cite: 64]
+- **Melihat Riwayat Jadwal** (fitur yang dapat dikembangkan lebih lanjut). [cite: 64]
 
-**1. Clone Repositori**
+---
+
+## Teknologi yang Digunakan
+
+| Kategori | Teknologi |
+| :--- | :--- |
+| **Frontend** | React, React Router, dnd-kit, jsPDF, html2canvas, react-icons |
+| **Backend** | Node.js, Express.js, MySQL2 |
+| **Database** | MySQL |
+| **Development**| Vite, Nodemon |
+
+---
+
+## Instalasi & Menjalankan Proyek
+
+Untuk menjalankan proyek ini di lingkungan lokal, ikuti langkah-langkah berikut:
+
+### Prasyarat
+- Node.js (v18 atau lebih baru)
+- MySQL Server
+
+### 1. Backend Setup
 ```bash
-git clone [https://github.com/nama-pengguna/nama-repo.git](https://github.com/nama-pengguna/nama-repo.git)
-cd nama-repo
+# 1. Masuk ke direktori backend
+cd backend
+
+# 2. Instal semua dependensi yang dibutuhkan
+npm install
+
+# 3. Buat database MySQL dengan nama 'lesson_manager' (atau sesuai konfigurasi Anda)
+
+# 4. Import semua file .sql atau buat tabel secara manual sesuai skema yang ada
+
+# 5. Buat file .env untuk konfigurasi database jika diperlukan
+
+# 6. Jalankan server backend
+nodemon server.js
+```
+Server backend akan berjalan di `http://localhost:3001`.
+
+### 2. Frontend Setup
+```bash
+# 1. Buka terminal baru dan masuk ke direktori frontend
+cd frontend
+
+# 2. Instal semua dependensi yang dibutuhkan
+npm install
+
+# 3. Jalankan server development frontend
+npm run dev
+```
+Aplikasi frontend akan berjalan di `http://localhost:3000` (atau port lain yang tersedia).
+
+---
+
+## Kontributor
+
+Proyek ini dirancang dan dikembangkan oleh:
+* **Muhamad Ikbal Handini** - *Program Studi Informatika, Sekolah Tinggi Teknologi Cipasung* [cite: 5, 6]
