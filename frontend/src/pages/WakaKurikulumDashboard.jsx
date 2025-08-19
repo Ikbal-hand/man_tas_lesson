@@ -37,22 +37,6 @@ const WakaKurikulumDashboard = () => {
 
     return (
         <div className="dashboard-container">
-            <aside className="sidebar">
-                <div className="sidebar-header">
-                    <h3>Waka Kurikulum</h3>
-                </div>
-                <ul className="sidebar-menu">
-                    <li onClick={() => handleMenuClick('kelola-jadwal')} className={activeMenu === 'kelola-jadwal' ? 'active' : ''}>
-                        <button>Kelola Jadwal</button>
-                    </li>
-                    <li onClick={() => handleMenuClick('kelola-penugasan')} className={activeMenu === 'kelola-penugasan' ? 'active' : ''}>
-                        <button>Kelola Penugasan</button>
-                    </li>
-                </ul>
-                <div className="sidebar-footer">
-                    <button onClick={handleLogout} className="logout-button">Logout</button>
-                </div>
-            </aside>
             <main className="main-content">
                 <header className="main-header">
                     <h1>Dashboard Waka Kurikulum</h1>

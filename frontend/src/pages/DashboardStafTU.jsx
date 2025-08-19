@@ -1,10 +1,6 @@
-// frontend/src/pages/DashboardStafTU.jsx
-
 import React, { useState, useEffect } from 'react';
-// --- BARU: Impor ikon dari react-icons ---
 import { FaChalkboardTeacher, FaSchool, FaBook } from 'react-icons/fa'; 
 import './DashboardStafTU.css';
-import GuruMengajar from './GuruMengajar';
 import RealtimeInfo from './RealtimeInfo';
 
 const DashboardStafTU = () => {
@@ -38,7 +34,6 @@ const DashboardStafTU = () => {
                 setLoading(false);
             }
         };
-
         fetchSummary();
     }, []);
 
@@ -46,48 +41,50 @@ const DashboardStafTU = () => {
     if (error) return <div className="error-container">Error: {error}</div>;
 
     return (
-        <div className="dashboard-staf-tu-container fade-in">
-            {/* --- PERUBAHAN: Struktur baru menggunakan CSS Grid --- */}
+        <div className="dashboard-staf-tu-container">
+            <div className="dashboard-header">
+                <h2>Dashboard Staf TU</h2>
+                <p>Ringkasan data utama sistem monitoring guru.</p>
+            </div>
+
             <div className="dashboard-grid">
-                
                 <div className="summary-cards">
-                    <div className="card card-guru">
-                        <div className="card-icon">
-                            <FaChalkboardTeacher size={32} />
+                    <div className="card">
+                        <div className="card-icon guru">
+                            <FaChalkboardTeacher />
                         </div>
-                        <div className="card-content">
+                        <div className="card-info">
                             <h3>Total Guru</h3>
                             <p>{summary.gurus}</p>
                         </div>
                     </div>
-                    <div className="card card-kelas">
-                        <div className="card-icon">
-                            <FaSchool size={32} />
+                    <div className="card">
+                        <div className="card-icon kelas">
+                            <FaSchool />
                         </div>
-                        <div className="card-content">
+                        <div className="card-info">
                             <h3>Total Kelas</h3>
                             <p>{summary.classes}</p>
                         </div>
                     </div>
-                    <div className="card card-mapel">
-                        <div className="card-icon">
-                            <FaBook size={32} />
+                    <div className="card">
+                        <div className="card-icon mapel">
+                            <FaBook />
                         </div>
-                        <div className="card-content">
+                        <div className="card-info">
                             <h3>Total Mata Pelajaran</h3>
                             <p>{summary.subjects}</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="realtime-info-widget">
+                <div className="realtime-info-widget widget">
+                     <h3>Informasi Real-time</h3>
                      <RealtimeInfo />
                 </div>
                 
-                <div className="monitoring-section-widget">
-                    <GuruMengajar />
-                </div>
-
+                {/* Anda bisa menambahkan widget lain di sini jika diperlukan */}
+                {/* <div className="another-widget widget"> ... </div> */}
             </div>
         </div>
     );

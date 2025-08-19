@@ -1,43 +1,39 @@
 // frontend/src/pages/KelolaPenugasan.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './KelolaPenugasan.css';
 import ConfirmPopup from '../components/ConfirmPopup';
+import SearchBar from '../components/SearchBar';
+import { FaTrash, FaPlus } from 'react-icons/fa';
 
 const KelolaPenugasan = () => {
     const [penugasan, setPenugasan] = useState([]);
     const [gurus, setGurus] = useState([]);
     const [mataPelajaran, setMataPelajaran] = useState([]);
-    const [kelas, setKelas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showForm, setShowForm] = useState(false);
-    const [formData, setFormData] = useState({ id_guru: '', id_mata_pelajaran: '', id_kelas: '' });
-    
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({ id_guru: '', id_mata_pelajaran: '' });
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [penugasanToDeleteId, setPenugasanToDeleteId] = useState(null);
-    const [selectedTingkat, setSelectedTingkat] = useState('10'); // State baru untuk filter
+    const [searchTerm, setSearchTerm] = useState('');
 
     const fetchAllData = async () => {
+        setLoading(true);
         try {
-            const [penugasanRes, gurusRes, mapelRes, kelasRes] = await Promise.all([
-                fetch('http://localhost:3001/api/penugasan'),
+            const [penugasanRes, gurusRes, mapelRes] = await Promise.all([
+                fetch('http://localhost:3001/api/penugasan-guru'), // Menggunakan endpoint baru
                 fetch('http://localhost:3001/api/guru'),
-                fetch('http://localhost:3001/api/mata-pelajaran'),
-                fetch('http://localhost:3001/api/kelas')
+                fetch('http://localhost:3001/api/mata-pelajaran')
             ]);
+            if (!penugasanRes.ok || !gurusRes.ok || !mapelRes.ok) throw new Error('Gagal memuat data.');
             
-            const penugasanData = await penugasanRes.json();
-            const gurusData = await gurusRes.json();
-            const mapelData = await mapelRes.json();
-            const kelasData = await kelasRes.json();
-            
-            setPenugasan(penugasanData);
-            setGurus(gurusData);
-            setMataPelajaran(mapelData);
-            setKelas(kelasData);
+            setPenugasan(await penugasanRes.json() || []);
+            setGurus(await gurusRes.json() || []);
+            setMataPelajaran(await mapelRes.json() || []);
         } catch (e) {
-            setError('Failed to fetch data.');
+            setError(e.message);
         } finally {
             setLoading(false);
         }
@@ -47,167 +43,146 @@ const KelolaPenugasan = () => {
         fetchAllData();
     }, []);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleOpenForm = () => {
+        setFormData({ id_guru: '', id_mata_pelajaran: '' });
+        setShowForm(true);
+    };
+    const handleCloseForm = () => {
+        setShowForm(false);
+        setError(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setError(null);
         
         try {
-            const response = await fetch('http://localhost:3001/api/penugasan', {
+            const response = await fetch('http://localhost:3001/api/penugasan-guru', { // Menggunakan endpoint baru
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            fetchAllData();
-            setFormData({ id_guru: '', id_mata_pelajaran: '', id_kelas: '' });
-            setShowForm(false);
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message || 'Gagal menyimpan data.');
+            
+            setPenugasan([...penugasan, result]);
+            handleCloseForm();
         } catch (e) {
             setError(e.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
-    
+
     const handleShowConfirm = (id) => {
         setPenugasanToDeleteId(id);
         setShowConfirmPopup(true);
     };
-    
-    const handleCancelDelete = () => {
-        setShowConfirmPopup(false);
-        setPenugasanToDeleteId(null);
-    };
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/penugasan/${penugasanToDeleteId}`, {
+            const response = await fetch(`http://localhost:3001/api/penugasan-guru/${penugasanToDeleteId}`, {
                 method: 'DELETE',
             });
-
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Gagal menghapus penugasan.');
             }
-
-            fetchAllData();
+            setPenugasan(penugasan.filter(p => p.id !== penugasanToDeleteId));
             setShowConfirmPopup(false);
             setPenugasanToDeleteId(null);
         } catch (e) {
-            setError(e.message);
+            alert(e.message);
+            setShowConfirmPopup(false);
         }
     };
-
-    const filteredPenugasan = penugasan.filter(p => {
-        const correspondingKelas = kelas.find(k => k.nama_kelas === p.nama_kelas);
-        return correspondingKelas && correspondingKelas.tingkat === selectedTingkat;
-    });
-
-    const groupedByKelas = filteredPenugasan.reduce((acc, p) => {
-        const kelasName = p.nama_kelas;
-        if (!acc[kelasName]) {
-            acc[kelasName] = [];
-        }
-        acc[kelasName].push(p);
-        return acc;
-    }, {});
     
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const filteredPenugasan = useMemo(() => {
+        if (!searchTerm) return penugasan;
+        return penugasan.filter(p =>
+            p.nama_guru.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.nama_mapel.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [penugasan, searchTerm]);
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
+    if (loading) return <div>Loading...</div>;
+    
     return (
-        <div className="kelola-penugasan-container fade-in">
+        <div className="kelola-data-container">
             <div className="table-header">
-                <h2>Kelola Penugasan Guru</h2>
-                <button onClick={() => setShowForm(!showForm)} className="add-button">
-                    {showForm ? 'Tutup Formulir' : 'Tambah Penugasan'}
-                </button>
+                <h2>Manajemen Penugasan Guru</h2>
+                <div className="header-actions">
+                    <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Cari guru atau mapel..." />
+                    <button onClick={handleOpenForm} className="add-button">
+                        <FaPlus /> Tambah Penugasan
+                    </button>
+                </div>
             </div>
             
             {showForm && (
-                <form onSubmit={handleSubmit} className="penugasan-form fade-in">
-                    <h3>Tambah Penugasan Baru</h3>
-                    <div className="form-group">
-                        <label>Guru:</label>
-                        <select name="id_guru" value={formData.id_guru} onChange={handleChange} required>
-                            <option value="">-- Pilih Guru --</option>
-                            {gurus.map(guru => (
-                                <option key={guru.id} value={guru.id}>{guru.nama}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label>Mata Pelajaran:</label>
-                        <select name="id_mata_pelajaran" value={formData.id_mata_pelajaran} onChange={handleChange} required>
-                            <option value="">-- Pilih Mata Pelajaran --</option>
-                            {mataPelajaran.map(mapel => (
-                                <option key={mapel.id} value={mapel.id}>{mapel.nama_mapel}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label>Kelas:</label>
-                        <select name="id_kelas" value={formData.id_kelas} onChange={handleChange} required>
-                            <option value="">-- Pilih Kelas --</option>
-                            {kelas.map(k => (
-                                <option key={k.id} value={k.id}>{k.nama_kelas}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <button type="submit" className="submit-button">Simpan</button>
-                    <button type="button" onClick={() => setShowForm(false)} className="cancel-button">Batal</button>
-                </form>
+                <div className="modal-overlay">
+                    <form onSubmit={handleSubmit} className="data-form fade-in">
+                        <h3>Tambah Penugasan Baru</h3>
+                        {error && <p className="error-message">{error}</p>}
+                        <div className="form-group">
+                            <label>Guru:</label>
+                            <select name="id_guru" value={formData.id_guru} onChange={handleChange} required>
+                                <option value="">-- Pilih Guru --</option>
+                                {gurus.map(guru => <option key={guru.id} value={guru.id}>{guru.nama}</option>)}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label>Mata Pelajaran:</label>
+                            <select name="id_mata_pelajaran" value={formData.id_mata_pelajaran} onChange={handleChange} required>
+                                <option value="">-- Pilih Mata Pelajaran --</option>
+                                {mataPelajaran.map(mapel => <option key={mapel.id} value={mapel.id}>{mapel.nama_mapel}</option>)}
+                            </select>
+                        </div>
+                        <div className="form-actions">
+                            <button type="button" onClick={handleCloseForm} className="cancel-button">Batal</button>
+                            <button type="submit" className="submit-button" disabled={isSubmitting}>
+                                {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             )}
 
-            <div className="jadwal-tabs">
-                <button onClick={() => setSelectedTingkat('10')} className={selectedTingkat === '10' ? 'active' : ''}>X</button>
-                <button onClick={() => setSelectedTingkat('11')} className={selectedTingkat === '11' ? 'active' : ''}>XI</button>
-                <button onClick={() => setSelectedTingkat('12')} className={selectedTingkat === '12' ? 'active' : ''}>XII</button>
-            </div>
-
-            {Object.keys(groupedByKelas).length > 0 ? (
-                Object.keys(groupedByKelas).map(kelasName => (
-                    <div key={kelasName} className="penugasan-per-kelas fade-in">
-                        <h3>{kelasName}</h3>
-                        <table className="penugasan-table">
-                            <thead>
-                                <tr>
-                                    <th>Guru</th>
-                                    <th>Mata Pelajaran</th>
-                                    <th>Aksi</th>
+            <div className="table-wrapper">
+                <table className="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Guru</th>
+                            <th>Mata Pelajaran yang Diampu</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredPenugasan.length > 0 ? (
+                            filteredPenugasan.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item.nama_guru}</td>
+                                    <td>{item.nama_mapel}</td>
+                                    <td className="action-buttons">
+                                        <button onClick={() => handleShowConfirm(item.id)} className="delete-button"><FaTrash /> Hapus</button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {groupedByKelas[kelasName].map((item) => (
-                                    <tr key={item.id}>
-                                        <td>{item.nama_guru}</td>
-                                        <td>{item.nama_mapel}</td>
-                                        <td>
-                                            <button onClick={() => handleShowConfirm(item.id)} className="delete-button">Hapus</button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                ))
-            ) : (
-                <p>Tidak ada penugasan guru untuk tingkat kelas ini.</p>
-            )}
+                            ))
+                        ) : (
+                             <tr><td colSpan="3" className="empty-table-message">{searchTerm ? 'Pencarian tidak ditemukan.' : 'Belum ada data penugasan.'}</td></tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             {showConfirmPopup && (
                 <ConfirmPopup
                     message="Apakah Anda yakin ingin menghapus penugasan ini?"
                     onConfirm={handleDelete}
-                    onCancel={handleCancelDelete}
+                    onCancel={() => setShowConfirmPopup(false)}
                 />
             )}
         </div>

@@ -1,0 +1,101 @@
+/* frontend/src/components/MainLayout.css */
+
+:root {
+    --primary-green: #005936;
+    --hover-green: #004d2e;
+    --sidebar-bg: #003822;
+    --text-light: #ffffff; /* Warna teks utama sudah putih */
+    --content-bg: #f4f7f6;
+    --border-color: #e5e7eb;
+}
+
+.main-layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--primary-green);
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+.sidebar-header img { width: 50px; margin-bottom: 10px; }
+.sidebar-header h3 { margin: 0; font-size: 18px; font-weight: 600; color:white}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    flex-grow: 1;
+    overflow-y: auto; 
+}
+
+.sidebar-nav a {
+    color: white;
+    /* --- PERBAIKAN: Hapus baris opacity agar teks solid putih --- */
+    /* opacity: 0.8; */ 
+    text-decoration: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500; /* Sedikit tebalkan agar lebih jelas */
+    transition: background-color 0.2s;
+}
+.sidebar-nav a:hover { 
+    background-color: var(--hover-green);
+}
+
+.sidebar-nav a.active {
+    background-color: var(--sidebar-bg);
+    font-weight: 700; /* Dibuat lebih tebal saat aktif */
+    border-left: 4px solid #ffffff;
+    padding-left: 16px;
+}
+
+.sidebar-footer { 
+    padding: 20px; 
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.logout-button {
+    width: 100%; padding: 10px; border: 1px solid var(--text-light);
+    background-color: transparent; color: white;
+    font-size: 16px; font-weight: 500; border-radius: 6px; cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+.logout-button:hover { background-color: var(--text-light); color: var(--primary-green); }
+
+.content {
+    flex-grow: 1;
+    background-color: var(--content-bg);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-header {
+    padding: 16px 24px;
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+.main-header h1 { margin: 0; font-size: 20px; font-weight: 600; }
+
+.content-area {
+    padding: 24px;
+    overflow-y: auto;
+    flex-grow: 1;
+}

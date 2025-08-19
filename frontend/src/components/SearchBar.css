@@ -1,0 +1,37 @@
+/* frontend/src/components/SearchBar.css */
+
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    color: #9ca3af; /* Warna ikon abu-abu */
+    pointer-events: none; /* Agar ikon tidak bisa diklik */
+}
+
+.search-bar input {
+    width: 100%;
+    min-width: 250px; /* Lebar minimum */
+    padding: 10px 12px 10px 40px; /* Padding kiri untuk ruang ikon */
+    border: 1px solid #d1d5db; /* Border abu-abu muda */
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    background-color: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-bar input::placeholder {
+    color: #9ca3af;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #005936; /* Warna primer hijau saat aktif */
+    box-shadow: 0 0 0 3px rgba(0, 89, 54, 0.1); /* Efek glow */
+}

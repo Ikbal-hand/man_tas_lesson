@@ -1,124 +1,32 @@
 /* frontend/src/pages/KelolaDataKelas.css */
 
-.kelola-data-kelas-container {
-    padding: 20px;
-}
+/* ... (semua style dari file CSS sebelumnya) ... */
 
-.kelola-data-kelas-container h2 {
-    color: #005936;
-    margin-bottom: 20px;
-}
-
-.kelas-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.kelas-table thead {
-    background-color: #005936;
-    color: #ffffff;
-}
-
-.kelas-table th, .kelas-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #dddddd;
-}
-
-.kelas-table tbody tr:nth-child(even) {
-    background-color: #f3f3f3;
-}
-
-.kelas-table tbody tr:hover {
-    background-color: #e2e2e2;
-}
-
-.kelas-table button {
-    margin-right: 5px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: #ffffff;
-}
-
-.kelas-table .edit-button {
-    background-color: #66BB6A;
-}
-
-.kelas-table .delete-button {
-    background-color: #e74c3c;
-}
-
-.table-header {
+/* --- Style Baru untuk Filter Tabs --- */
+.filter-tabs {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.add-button {
-    padding: 10px 15px;
-    background-color: #005936;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-.add-button:hover {
-    background-color: #004d2e;
-}
-
-.kelas-form {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 5px;
     margin-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.kelas-form h3 {
-    color: #005936;
-    margin-top: 0;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.submit-button, .cancel-button {
-    padding: 10px 15px;
+.filter-tabs button {
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    background-color: transparent;
     cursor: pointer;
-    margin-right: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6b7280; /* Warna teks non-aktif */
+    border-bottom: 3px solid transparent; /* Garis bawah transparan */
+    transition: all 0.2s ease;
 }
 
-.submit-button {
-    background-color: #005936;
-    color: white;
+.filter-tabs button:hover {
+    color: #374151;
 }
 
-.cancel-button {
-    background-color: #ccc;
-    color: #333;
+.filter-tabs button.active {
+    color: var(--primary-green, #005936); /* Warna teks aktif */
+    border-bottom-color: var(--primary-green, #005936); /* Garis bawah aktif */
 }

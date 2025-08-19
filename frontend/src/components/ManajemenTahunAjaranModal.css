@@ -1,0 +1,30 @@
+.ta-modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    animation: scale-up 0.3s ease-out forwards;
+}
+.ta-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.ta-modal-header h2 { margin: 0; font-size: 18px; }
+.close-button { background: none; border: none; font-size: 24px; cursor: pointer; }
+.ta-modal-body { padding: 24px; }
+
+.ta-list { list-style: none; padding: 0; margin: 0 0 24px 0; max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; }
+.ta-list li { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #e5e7eb; }
+.ta-list li:last-child { border-bottom: none; }
+.ta-list li.active { background-color: var(--light-green, #e8f5e9); font-weight: bold; color: var(--primary-green, #005936); }
+.ta-actions button { background: none; border: none; cursor: pointer; color: #6b7280; }
+.ta-actions button.delete { color: #dc2626; }
+
+.ta-form { border-top: 1px solid #e5e7eb; padding-top: 20px; }
+.ta-form h4 { margin: 0 0 16px 0; }
+.ta-form input[type="text"] { width: 100%; box-sizing: border-box; /* ... style lain ... */ }
+.checkbox-group { display: flex; align-items: center; gap: 8px; margin: 12px 0; }

@@ -1,107 +1,118 @@
-/* frontend/src/pages/DashboardStafTU.css */
-
-/* Definisikan variabel warna untuk konsistensi */
 :root {
-    --primary-color: #005936;
-    --background-color: #f4f7f6;
-    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    --primary-green: #005936;
+    --background-grey: #f8f9fa;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+    --border-color: #e5e7eb;
+    --text-dark: #1f2937;
+    --text-light: #6b7280;
 }
 
 .dashboard-staf-tu-container {
     padding: 24px;
-    background-color: var(--background-color);
+    background-color: var(--background-grey);
+    font-family: 'Inter', sans-serif;
 }
 
-/* --- BARU: Layout utama menggunakan CSS Grid --- */
+.dashboard-header {
+    margin-bottom: 24px;
+}
+
+.dashboard-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.dashboard-header p {
+    font-size: 16px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+/* --- Layout Utama Menggunakan CSS Grid --- */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 kolom sama lebar */
-    grid-template-areas:
-        "summary summary realtime"
-        "monitoring monitoring realtime";
+    grid-template-columns: 2fr 1fr; /* Kolom utama 66%, kolom sisi 33% */
     gap: 24px;
 }
 
 .summary-cards {
-    grid-area: summary;
+    grid-column: 1 / -1; /* Kartu ringkasan mengambil lebar penuh */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
 
-.realtime-info-widget {
-    grid-area: realtime;
-}
-
-.monitoring-section-widget {
-    grid-area: monitoring;
-}
-
-/* --- BARU: Desain kartu yang lebih modern --- */
-.card {
-    background: #ffffff;
+.widget {
+    background-color: #ffffff;
     padding: 24px;
     border-radius: 12px;
     box-shadow: var(--card-shadow);
+}
+
+.widget h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+/* --- Desain Kartu Ringkasan yang Lebih Keren --- */
+.card {
     display: flex;
     align-items: center;
     gap: 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.card-icon {
-    padding: 16px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-}
-
-/* Warna ikon yang berbeda untuk setiap kartu */
-.card-guru .card-icon { background: linear-gradient(45deg, #2a9d8f, #264653); }
-.card-kelas .card-icon { background: linear-gradient(45deg, #f4a261, #e76f51); }
-.card-mapel .card-icon { background: linear-gradient(45deg, #8ecae6, #219ebc); }
-
-.card-content h3 {
-    margin-top: 0;
-    margin-bottom: 4px;
-    color: #6c757d;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.card-content p {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin: 0;
-    color: #212529;
-}
-
-/* Styling untuk widget lain agar konsisten */
-.realtime-info-widget,
-.monitoring-section-widget {
-    background: #ffffff;
+    background-color: #ffffff;
     padding: 24px;
     border-radius: 12px;
     box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-/* Responsif untuk layar lebih kecil */
+.card-icon {
+    font-size: 28px;
+    padding: 18px;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.card-icon.guru { background: linear-gradient(45deg, #10b981, #059669); }
+.card-icon.kelas { background: linear-gradient(45deg, #f59e0b, #d97706); }
+.card-icon.mapel { background: linear-gradient(45deg, #3b82f6, #2563eb); }
+
+.card-info h3 {
+    font-size: 15px;
+    color: var(--text-light);
+    margin: 0 0 4px 0;
+    font-weight: 500;
+}
+.card-info p {
+    font-size: 36px;
+    color: var(--text-dark);
+    margin: 0;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* --- Responsif untuk Mobile --- */
 @media (max-width: 992px) {
     .dashboard-grid {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "summary"
-            "realtime"
-            "monitoring";
+        grid-template-columns: 1fr; /* Semua widget jadi satu kolom */
     }
+}
+
+@media (max-width: 768px) {
     .summary-cards {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: 1fr; /* Kartu ringkasan ditumpuk vertikal */
     }
 }

@@ -1,5 +1,3 @@
-// frontend/src/pages/DashboardKepalaSekolah.jsx
-
 import React, { useState, useEffect, useMemo } from 'react';
 import './DashboardKepalaSekolah.css';
 import JadwalBerikutnya from '../components/JadwalBerikutnya';
@@ -17,7 +15,7 @@ const JadwalListView = ({ jadwal, error }) => {
 
     return (
         <div className="list-view-container">
-            {Object.keys(groupedSchedule).sort((a, b) => { // Mengurutkan hari
+            {Object.keys(groupedSchedule).sort((a, b) => {
                 const dayOrder = { 'Senin': 1, 'Selasa': 2, 'Rabu': 3, 'Kamis': 4, 'Jumat': 5 };
                 return dayOrder[a] - dayOrder[b];
             }).map(day => (
@@ -62,8 +60,6 @@ const DashboardKepalaSekolah = () => {
     const [waktuSekarang, setWaktuSekarang] = useState(new Date());
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    // State untuk filter
     const [gurus, setGurus] = useState([]);
     const [allKelas, setAllKelas] = useState([]);
     const [selectedGuru, setSelectedGuru] = useState('');
@@ -72,12 +68,22 @@ const DashboardKepalaSekolah = () => {
 
     useEffect(() => {
         const fetchInitialData = async () => {
+            setLoading(true);
+            setError(null);
             try {
+                // Langkah 1: Ambil Tahun Ajaran untuk menemukan yang aktif
+                const taRes = await fetch('http://localhost:3001/api/tahun-ajaran');
+                if (!taRes.ok) throw new Error('Gagal memuat daftar tahun ajaran.');
+                const taData = await taRes.json();
+                const activeYear = taData.find(y => y.is_active) || taData[0];
+                if (!activeYear) throw new Error("Tidak ada data Tahun Ajaran di database.");
+
+                // Langkah 2: Ambil semua data lain berdasarkan tahun ajaran aktif
                 const [gurusRes, kelasRes, subjectsRes, jadwalRes] = await Promise.all([
                     fetch('http://localhost:3001/api/guru'),
                     fetch('http://localhost:3001/api/kelas'),
                     fetch('http://localhost:3001/api/mata-pelajaran'),
-                    fetch('http://localhost:3001/api/jadwal'),
+                    fetch(`http://localhost:3001/api/jadwal?tahun_ajaran=${activeYear.id}`),
                 ]);
                 
                 if (!gurusRes.ok || !kelasRes.ok || !subjectsRes.ok || !jadwalRes.ok) {
@@ -90,9 +96,9 @@ const DashboardKepalaSekolah = () => {
                 const jadwalData = await jadwalRes.json();
 
                 setSummary({ gurus: gurusData.length, classes: kelasData.length, subjects: subjectsData.length });
-                setGurus(gurusData);
-                setAllKelas(kelasData);
-                setAllJadwal(jadwalData);
+                setGurus(gurusData || []);
+                setAllKelas(kelasData || []);
+                setAllJadwal(jadwalData || []);
             } catch (e) {
                 setError(e.message);
             } finally {
@@ -100,6 +106,7 @@ const DashboardKepalaSekolah = () => {
             }
         };
         fetchInitialData();
+
         const timer = setInterval(() => setWaktuSekarang(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);

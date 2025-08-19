@@ -1,0 +1,65 @@
+/* src/components/JadwalForm.css */
+
+.searchable-select-container {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.searchable-select-container:focus-within {
+    border-color: var(--primary-green, #005936);
+    box-shadow: 0 0 0 3px rgba(0, 89, 54, 0.1);
+}
+
+.search-in-form {
+    position: relative;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* --- PERUBAHAN: Padding kiri dikembalikan normal --- */
+.search-in-form input {
+    width: 100%;
+    padding: 12px; /* Padding kembali normal */
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.options-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+/* --- PERUBAHAN: Disesuaikan untuk satu baris teks --- */
+.option-item {
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 14px;
+}
+.option-item:hover {
+    background-color: #f3f4f6;
+}
+.option-item.selected {
+    background-color: var(--primary-green, #005936);
+    color: white;
+}
+
+/* Style untuk .option-code bisa dihapus karena sudah tidak digunakan */
+
+.option-item-empty {
+    padding: 12px;
+    text-align: center;
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* Scrollbar styling (tetap sama) */
+.options-list::-webkit-scrollbar { width: 8px; }
+.options-list::-webkit-scrollbar-track { background: #f1f1f1; }
+.options-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+.options-list::-webkit-scrollbar-thumb:hover { background: #aaa; }

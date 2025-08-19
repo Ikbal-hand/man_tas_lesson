@@ -6,3 +6,104 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f4f7f6;
 }
+/* Sebaiknya diletakkan di App.css agar berlaku global */
+
+/* Overlay yang menutupi latar belakang */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(17, 24, 39, 0.4); /* Warna lebih lembut dari hitam pekat */
+    backdrop-filter: blur(4px); /* EFEK KEREN: Memberi efek blur pada konten di belakangnya */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0; /* Mulai dengan transparan untuk animasi */
+    animation: fade-in 0.3s ease-out forwards;
+}
+.add-button {
+    background-color: #005936;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+.add-button:hover { background-color: #004d2e; }
+
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; }
+.form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; }
+
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+.submit-button { background-color: #005936; color: white; border: none; }
+.cancel-button { background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+.submit-button, .cancel-button { padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; }
+.submit-button:disabled { background-color: #a3b1a9; cursor: not-allowed; }
+/* Styling untuk komponen select-dengan-pencarian yang baru */
+.searchable-select-container {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden; /* Penting untuk menyatukan tampilan */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.searchable-select-container:focus-within {
+    border-color: var(--primary-green, #005936);
+    box-shadow: 0 0 0 3px rgba(0, 89, 54, 0.1);
+}
+
+.search-in-form {
+    position: relative;
+    border-bottom: 1px solid #e5e7eb; /* Garis pemisah */
+}
+.search-in-form .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+.search-in-form input {
+    width: 100%;
+    padding: 12px 12px 12px 36px;
+    border: none; /* Hapus border input */
+    outline: none; /* Hapus outline saat fokus */
+    font-size: 14px;
+}
+
+.form-group select[size] {
+    width: 100%;
+    border: none; /* Hapus border select */
+    outline: none; /* Hapus outline saat fokus */
+}
+
+.form-group select[size] option {
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.form-group select[size] option:checked {
+    background-color: var(--primary-green, #005936);
+    color: white;
+}
+
+/* Scrollbar yang lebih modern (untuk browser Webkit seperti Chrome) */
+.form-group select[size]::-webkit-scrollbar {
+  width: 8px;
+}
+.form-group select[size]::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.form-group select[size]::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+.form-group select[size]::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}

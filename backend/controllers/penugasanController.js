@@ -1,55 +1,82 @@
-// backend/controllers/penugasanController.js
-
 const db = require('../config/db');
 
-exports.getAllPenugasan = (req, res) => {
-    const sql = `
-        SELECT 
-            pg.id,
-            g.nama AS nama_guru,
-            mp.nama_mapel,
-            k.nama_kelas
-        FROM penugasan_guru pg
-        LEFT JOIN guru g ON pg.id_guru = g.id
-        JOIN mata_pelajaran mp ON pg.id_mata_pelajaran = mp.id
-        JOIN kelas k ON pg.id_kelas = k.id
-    `;
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error fetching penugasan:', err);
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json(result);
-    });
+// GET: Mengambil semua data penugasan dengan nama guru dan mapel
+exports.getAllPenugasan = async (req, res) => {
+    try {
+        const sql = `
+            SELECT 
+                p.id,
+                g.nama AS nama_guru,
+                mp.nama_mapel
+            FROM penugasan_guru p
+            JOIN guru g ON p.id_guru = g.id
+            JOIN mata_pelajaran mp ON p.id_mata_pelajaran = mp.id
+            ORDER BY g.nama, mp.nama_mapel;
+        `;
+        const [results] = await db.promise().query(sql);
+        // Pastikan selalu mengembalikan array
+        res.status(200).json(results || []);
+    } catch (error) {
+        console.error("Error fetching penugasan:", error);
+        res.status(500).json({ message: "Terjadi kesalahan pada server saat mengambil data penugasan." });
+    }
 };
 
-exports.addPenugasan = (req, res) => {
-    const { id_guru, id_mata_pelajaran, id_kelas } = req.body;
-    const sql = `
-        INSERT INTO penugasan_guru (id_guru, id_mata_pelajaran, id_kelas)
-        VALUES (?, ?, ?)
-    `;
-    const guruId = id_guru === '' ? null : id_guru;
-    db.query(sql, [guruId, id_mata_pelajaran, id_kelas], (err, result) => {
-        if (err) {
-            console.error('Error adding penugasan:', err);
-            return res.status(500).json({ error: err.message });
+// POST: Menambah penugasan baru
+exports.addPenugasan = async (req, res) => {
+    const { id_guru, id_mata_pelajaran } = req.body;
+    if (!id_guru || !id_mata_pelajaran) {
+        return res.status(400).json({ message: 'Guru dan Mata Pelajaran wajib dipilih.' });
+    }
+
+    try {
+        const [existing] = await db.promise().query(
+            'SELECT id FROM penugasan_guru WHERE id_guru = ? AND id_mata_pelajaran = ?',
+            [id_guru, id_mata_pelajaran]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({ message: 'Penugasan untuk guru dan mata pelajaran ini sudah ada.' });
         }
-        res.status(201).json({ id: result.insertId, ...req.body });
-    });
+
+        const [insertResult] = await db.promise().query(
+            'INSERT INTO penugasan_guru (id_guru, id_mata_pelajaran) VALUES (?, ?)',
+            [id_guru, id_mata_pelajaran]
+        );
+        
+        const newId = insertResult.insertId;
+        const [newPenugasan] = await db.promise().query(`
+            SELECT p.id, g.nama AS nama_guru, mp.nama_mapel 
+            FROM penugasan_guru p 
+            JOIN guru g ON p.id_guru = g.id 
+            JOIN mata_pelajaran mp ON p.id_mata_pelajaran = mp.id 
+            WHERE p.id = ?`, [newId]);
+
+        res.status(201).json(newPenugasan[0]);
+    } catch (error) {
+        console.error("Error adding penugasan:", error);
+        res.status(500).json({ message: "Gagal menyimpan penugasan." });
+    }
 };
 
-exports.deletePenugasan = (req, res) => {
+// DELETE: Menghapus penugasan
+exports.deletePenugasan = async (req, res) => {
     const { id } = req.params;
-    const sql = 'DELETE FROM penugasan_guru WHERE id = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error('Error deleting penugasan:', err);
-            return res.status(500).json({ error: err.message });
+    try {
+        const [jadwalCount] = await db.promise().query(
+            'SELECT COUNT(*) as count FROM jadwal WHERE id_penugasan = ?',
+            [id]
+        );
+        if (jadwalCount[0].count > 0) {
+            return res.status(409).json({ message: 'Tidak bisa menghapus, penugasan ini sedang digunakan pada jadwal.' });
         }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Penugasan not found' });
+
+        const [deleteResult] = await db.promise().query('DELETE FROM penugasan_guru WHERE id = ?', [id]);
+        if (deleteResult.affectedRows === 0) {
+            return res.status(404).json({ message: 'Penugasan tidak ditemukan.' });
         }
-        res.status(200).json({ message: 'Penugasan deleted successfully' });
-    });
+        res.status(200).json({ message: 'Penugasan berhasil dihapus.' });
+    } catch (error) {
+        console.error("Error deleting penugasan:", error);
+        res.status(500).json({ message: "Terjadi kesalahan pada server." });
+    }
 };

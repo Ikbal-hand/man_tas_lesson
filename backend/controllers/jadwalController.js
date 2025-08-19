@@ -1,174 +1,134 @@
 // backend/controllers/jadwalController.js
+
 const db = require('../config/db');
 
+// GET: Mengambil semua jadwal untuk tahun ajaran tertentu
 exports.getAllJadwal = (req, res) => {
+    const idTahunAjaran = req.query.tahun_ajaran;
+    if (!idTahunAjaran) {
+        return res.status(400).json({ message: 'Parameter query "tahun_ajaran" dibutuhkan.' });
+    }
+
+    // PERBAIKAN: JOIN kelas k ON j.id_kelas = k.id
     const sql = `
         SELECT 
-            j.id, j.hari, j.jam_ke, j.jam_mulai, j.jam_selesai,
-            pg.id AS id_penugasan,
+            j.id, j.hari, j.jam_ke, j.jam_mulai, j.jam_selesai, j.id_tahun_ajaran,
+            p.id AS id_penugasan,
             g.id AS id_guru, g.nama AS nama_guru,
             mp.id AS id_mata_pelajaran, mp.nama_mapel,
             k.id AS id_kelas, k.nama_kelas, k.tingkat
         FROM jadwal j
-        JOIN penugasan_guru pg ON j.id_penugasan = pg.id
-        JOIN guru g ON pg.id_guru = g.id
-        JOIN mata_pelajaran mp ON pg.id_mata_pelajaran = mp.id
-        JOIN kelas k ON pg.id_kelas = k.id
+        JOIN penugasan_guru p ON j.id_penugasan = p.id
+        JOIN kelas k ON j.id_kelas = k.id  -- <-- Perbaikan join di sini
+        JOIN guru g ON p.id_guru = g.id
+        JOIN mata_pelajaran mp ON p.id_mata_pelajaran = mp.id
+        WHERE j.id_tahun_ajaran = ?
         ORDER BY j.hari, j.jam_ke, k.nama_kelas
     `;
-    db.query(sql, (err, result) => {
+
+    db.query(sql, [idTahunAjaran], (err, result) => {
         if (err) {
             console.error('Error fetching all jadwal:', err);
-            return res.status(500).json({ error: err.message });
+            return res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
         }
-        res.status(200).json(result);
+        res.status(200).json(result || []);
     });
 };
 
+// POST: Menambah jadwal baru
 exports.addJadwal = async (req, res) => {
-    const { id_penugasan, hari, jam_ke, jam_mulai, jam_selesai } = req.body;
-
-    const [penugasanResult] = await db.promise().query('SELECT id_guru, id_kelas FROM penugasan_guru WHERE id = ?', [id_penugasan]);
-    if (penugasanResult.length === 0) {
-        return res.status(404).json({ message: 'Penugasan tidak ditemukan.' });
+    const { id_penugasan, id_kelas, hari, jam_ke, jam_mulai, jam_selesai, id_tahun_ajaran } = req.body;
+    if (!id_penugasan || !id_kelas || !hari || !jam_ke || !jam_mulai || !jam_selesai || !id_tahun_ajaran) {
+        return res.status(400).json({ message: 'Semua field wajib diisi.' });
     }
-    const { id_guru, id_kelas } = penugasanResult[0];
-
-    const konflikSql = `
-        SELECT COUNT(*) as count FROM jadwal j
-        JOIN penugasan_guru pg ON j.id_penugasan = pg.id
-        WHERE j.hari = ? AND 
-        (
-            (pg.id_guru = ?) OR (pg.id_kelas = ?)
-        ) AND
-        (
-            (j.jam_mulai >= ? AND j.jam_mulai < ?) OR
-            (j.jam_selesai > ? AND j.jam_selesai <= ?) OR
-            (? >= j.jam_mulai AND ? < j.jam_selesai)
-        )
-    `;
-    const konflikParams = [hari, id_guru, id_kelas, jam_mulai, jam_selesai, jam_mulai, jam_selesai, jam_mulai, jam_selesai];
 
     try {
-        const [konflikResult] = await db.promise().query(konflikSql, konflikParams);
-        if (konflikResult[0].count > 0) {
-            return res.status(409).json({ message: 'Konflik jadwal terdeteksi: Guru atau kelas bentrok pada waktu yang sama.' });
+        const [penugasanResult] = await db.promise().query('SELECT id_guru FROM penugasan_guru WHERE id = ?', [id_penugasan]);
+        if (penugasanResult.length === 0) {
+            return res.status(404).json({ message: 'Penugasan tidak ditemukan.' });
         }
+        const { id_guru } = penugasanResult[0];
+
+        const [konflikResult] = await db.promise().query(
+            `SELECT j.id FROM jadwal j JOIN penugasan_guru p ON j.id_penugasan = p.id WHERE j.hari = ? AND j.id_tahun_ajaran = ? AND (p.id_guru = ? OR j.id_kelas = ?) AND (? < j.jam_selesai AND ? > j.jam_mulai) LIMIT 1`,
+            [hari, id_tahun_ajaran, id_guru, id_kelas, jam_mulai, jam_selesai]
+        );
+        if (konflikResult.length > 0) {
+            return res.status(409).json({ message: 'Konflik jadwal: Guru atau kelas sudah ada jadwal pada waktu yang sama.' });
+        }
+
+        const [insertResult] = await db.promise().query(
+            'INSERT INTO jadwal (id_penugasan, id_kelas, hari, jam_ke, jam_mulai, jam_selesai, id_tahun_ajaran) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [id_penugasan, id_kelas, hari, jam_ke, jam_mulai, jam_selesai, id_tahun_ajaran]
+        );
+
+        const newJadwalId = insertResult.insertId;
+        const [newJadwal] = await db.promise().query(`
+            SELECT j.id, j.hari, j.jam_ke, j.jam_mulai, j.jam_selesai, p.id AS id_penugasan, g.nama AS nama_guru, mp.nama_mapel, k.nama_kelas, k.id AS id_kelas, j.id_tahun_ajaran
+            FROM jadwal j JOIN penugasan_guru p ON j.id_penugasan = p.id JOIN guru g ON p.id_guru = g.id JOIN mata_pelajaran mp ON p.id_mata_pelajaran = mp.id JOIN kelas k ON j.id_kelas = k.id
+            WHERE j.id = ?`, [newJadwalId]);
+
+        res.status(201).json(newJadwal[0]);
     } catch (err) {
-        console.error('Error checking for conflict:', err);
-        return res.status(500).json({ error: err.message });
+        console.error('Error adding jadwal:', err);
+        return res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
     }
-
-    const sql = `
-        INSERT INTO jadwal (id_penugasan, hari, jam_ke, jam_mulai, jam_selesai) 
-        VALUES (?, ?, ?, ?, ?)
-    `;
-    const params = [id_penugasan, hari, jam_ke, jam_mulai, jam_selesai];
-
-    db.query(sql, params, (err, result) => {
-        if (err) {
-            console.error('Error adding jadwal:', err);
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(201).json({ id: result.insertId, ...req.body });
-    });
 };
 
+// PUT: Mengedit jadwal
 exports.editJadwal = async (req, res) => {
     const { id } = req.params;
-    const { id_penugasan, hari, jam_ke, jam_mulai, jam_selesai } = req.body;
-
-    const [penugasanResult] = await db.promise().query('SELECT id_guru, id_kelas FROM penugasan_guru WHERE id = ?', [id_penugasan]);
-    if (penugasanResult.length === 0) {
-        return res.status(404).json({ message: 'Penugasan tidak ditemukan.' });
-    }
-    const { id_guru, id_kelas } = penugasanResult[0];
-
-    const konflikSql = `
-        SELECT COUNT(*) as count FROM jadwal j
-        JOIN penugasan_guru pg ON j.id_penugasan = pg.id
-        WHERE j.id != ? AND j.hari = ? AND
-        (
-            (pg.id_guru = ?) OR (pg.id_kelas = ?)
-        ) AND
-        (
-            (j.jam_mulai >= ? AND j.jam_mulai < ?) OR
-            (j.jam_selesai > ? AND j.jam_selesai <= ?) OR
-            (? >= j.jam_mulai AND ? < j.jam_selesai)
-        )
-    `;
-    const konflikParams = [id, hari, id_guru, id_kelas, jam_mulai, jam_selesai, jam_mulai, jam_selesai, jam_mulai, jam_selesai];
+    const { id_penugasan, id_kelas, hari, jam_ke, jam_mulai, jam_selesai, id_tahun_ajaran } = req.body;
 
     try {
-        const [konflikResult] = await db.promise().query(konflikSql, konflikParams);
-        if (konflikResult[0].count > 0) {
-            return res.status(409).json({ message: 'Konflik jadwal terdeteksi: Guru atau kelas bentrok pada waktu yang sama.' });
-        }
+        const [penugasanResult] = await db.promise().query('SELECT id_guru FROM penugasan_guru WHERE id = ?', [id_penugasan]);
+        if (penugasanResult.length === 0) return res.status(404).json({ message: 'Penugasan tidak ditemukan.' });
+        const { id_guru } = penugasanResult[0];
+
+        const [konflikResult] = await db.promise().query(
+            `SELECT j.id FROM jadwal j JOIN penugasan_guru p ON j.id_penugasan = p.id WHERE j.id != ? AND j.hari = ? AND j.id_tahun_ajaran = ? AND (p.id_guru = ? OR j.id_kelas = ?) AND (? < j.jam_selesai AND ? > jam_mulai) LIMIT 1`,
+            [id, hari, id_tahun_ajaran, id_guru, id_kelas, jam_mulai, jam_selesai]
+        );
+        if (konflikResult.length > 0) return res.status(409).json({ message: 'Konflik jadwal terdeteksi.' });
+
+        await db.promise().query(
+            'UPDATE jadwal SET id_penugasan = ?, id_kelas = ?, hari = ?, jam_ke = ?, jam_mulai = ?, jam_selesai = ?, id_tahun_ajaran = ? WHERE id = ?',
+            [id_penugasan, id_kelas, hari, jam_ke, jam_mulai, jam_selesai, id_tahun_ajaran, id]
+        );
+
+        const [updatedJadwal] = await db.promise().query(`
+            SELECT j.id, j.hari, j.jam_ke, /* ... semua kolom ... */
+            FROM jadwal j /* ... semua JOIN ... */
+            WHERE j.id = ?`, [id]);
+            
+        res.status(200).json(updatedJadwal[0]);
     } catch (err) {
-        console.error('Error checking for conflict:', err);
-        return res.status(500).json({ error: err.message });
+        console.error('Error editing jadwal:', err);
+        res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
     }
-
-    const sql = `
-        UPDATE jadwal SET id_penugasan = ?, hari = ?, jam_ke = ?, jam_mulai = ?, jam_selesai = ?
-        WHERE id = ?
-    `;
-    const params = [id_penugasan, hari, jam_ke, jam_mulai, jam_selesai, id];
-
-    db.query(sql, params, (err, result) => {
-        if (err) {
-            console.error('Error editing jadwal:', err);
-            return res.status(500).json({ error: err.message });
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Jadwal not found' });
-        }
-        res.status(200).json({ id: parseInt(id), ...req.body });
-    });
 };
 
-exports.deleteJadwal = (req, res) => {
+// DELETE: Menghapus jadwal
+exports.deleteJadwal = async (req, res) => {
     const { id } = req.params;
-    const sql = 'DELETE FROM jadwal WHERE id = ?';
-
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error('Error deleting jadwal:', err);
-            return res.status(500).json({ error: err.message });
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Jadwal not found' });
-        }
-        res.status(200).json({ message: 'Jadwal deleted successfully' });
-    });
+    try {
+        const [result] = await db.promise().query('DELETE FROM jadwal WHERE id = ?', [id]);
+        if (result.affectedRows === 0) return res.status(404).json({ message: 'Jadwal tidak ditemukan.' });
+        res.status(200).json({ message: 'Jadwal berhasil dihapus.' });
+    } catch (err) {
+        res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
+    }
 };
 
-exports.getKonflikJadwal = (req, res) => {
-    const sql = `
-        SELECT
-            j1.id, 
-            g1.nama AS guru_1, 
-            k1.nama_kelas AS kelas_1, 
-            j1.hari, j1.jam_mulai, j1.jam_selesai,
-            g2.nama AS guru_2, 
-            k2.nama_kelas AS kelas_2
-        FROM jadwal j1
-        JOIN jadwal j2 ON j1.id < j2.id AND j1.hari = j2.hari
-        JOIN penugasan_guru pg1 ON j1.id_penugasan = pg1.id
-        JOIN penugasan_guru pg2 ON j2.id_penugasan = pg2.id
-        JOIN guru g1 ON pg1.id_guru = g1.id
-        JOIN guru g2 ON pg2.id_guru = g2.id
-        JOIN kelas k1 ON pg1.id_kelas = k1.id
-        JOIN kelas k2 ON pg2.id_kelas = k2.id
-        WHERE
-            g1.id = g2.id OR k1.id = k2.id
-        ORDER BY j1.hari, j1.jam_mulai
-    `;
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Error fetching conflicts:', err);
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json(results);
-    });
+// DELETE: Mengosongkan jadwal per kelas
+exports.clearJadwalByKelas = async (req, res) => {
+    const { id_kelas } = req.params;
+    const { hari, tahun_ajaran } = req.query;
+    if (!hari || !tahun_ajaran) return res.status(400).json({ message: 'Parameter "hari" dan "tahun_ajaran" dibutuhkan.' });
+    try {
+        await db.promise().query('DELETE FROM jadwal WHERE id_kelas = ? AND hari = ? AND id_tahun_ajaran = ?', [id_kelas, hari, tahun_ajaran]);
+        res.status(200).json({ message: `Jadwal berhasil dikosongkan.` });
+    } catch (err) {
+        res.status(500).json({ message: 'Terjadi kesalahan pada server.' });
+    }
 };

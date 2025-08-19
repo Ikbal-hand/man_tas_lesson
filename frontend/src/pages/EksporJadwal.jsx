@@ -1,10 +1,8 @@
-// frontend/src/pages/EksporJadwal.jsx
-
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './EksporJadwal.css';
-import JadwalGrid from '../components/JadwalGrid'; // Pastikan komponen ini ada
+import JadwalGrid from '../components/JadwalGrid';
 
 // Custom hook untuk menunda eksekusi (mencegah spam API)
 const useDebounce = (value, delay) => {
@@ -45,28 +43,36 @@ const EksporJadwal = () => {
     useEffect(() => {
         const fetchInitialData = async () => {
             setLoadingFilters(true);
+            setError(null);
             try {
-                const [gurusRes, kelasRes, jadwalRes] = await Promise.all([
+                // Langkah 1: Ambil Tahun Ajaran untuk menemukan yang aktif
+                const taRes = await fetch('http://localhost:3001/api/tahun-ajaran');
+                if (!taRes.ok) throw new Error('Gagal memuat daftar tahun ajaran.');
+                const taData = await taRes.json();
+                const activeYear = taData.find(y => y.is_active) || taData[0];
+                if (!activeYear) throw new Error("Tidak ada data Tahun Ajaran di database.");
+
+                // Langkah 2: Ambil semua data lain, termasuk jadwal DENGAN parameter tahun ajaran
+                const [gurusRes, kelasRes, jadwalRes, layoutRes] = await Promise.all([
                     fetch('http://localhost:3001/api/guru'),
                     fetch('http://localhost:3001/api/kelas'),
-                    fetch('http://localhost:3001/api/jadwal'),
+                    fetch(`http://localhost:3001/api/jadwal?tahun_ajaran=${activeYear.id}`),
+                    fetch(`http://localhost:3001/api/layout?tahun_ajaran=${activeYear.id}`)
                 ]);
+
                 if (!gurusRes.ok || !kelasRes.ok || !jadwalRes.ok) throw new Error('Gagal mengambil data awal dari server.');
                 
-                setGurus(await gurusRes.json());
-                setAllKelas(await kelasRes.json());
-                setAllJadwal(await jadwalRes.json());
+                setGurus(await gurusRes.json() || []);
+                setAllKelas(await kelasRes.json() || []);
+                setAllJadwal(await jadwalRes.json() || []);
 
-                // Definisikan struktur hari untuk tampilan grid
-                const initialDayStructure = [
-                    { id: 'item-1', type: 'activity', name: 'Tadarus', jam_ke: null, waktuMulai: '07:00', waktuSelesai: '07:15' },
-                    { id: 'item-2', type: 'lesson', name: 'Jam Ke-1', jam_ke: 1, waktuMulai: '07:15', waktuSelesai: '08:00' },
-                    { id: 'item-3', type: 'lesson', name: 'Jam Ke-2', jam_ke: 2, waktuMulai: '08:00', waktuSelesai: '08:45' },
-                    { id: 'item-4', type: 'activity', name: 'Istirahat', jam_ke: null, waktuMulai: '08:45', waktuSelesai: '09:15' },
-                    { id: 'item-5', type: 'lesson', name: 'Jam Ke-3', jam_ke: 3, waktuMulai: '09:15', waktuSelesai: '10:00' },
-                    { id: 'item-6', type: 'activity', name: 'Solat Dzuhur', jam_ke: null, waktuMulai: '12:00', waktuSelesai: '13:00' },
-                ];
-                setDayStructure(initialDayStructure);
+                const defaultLayout = [{ id: 'item-1', type: 'lesson', name: 'Jam Ke-1', jam_ke: 1, waktuMulai: '07:00', waktuSelesai: '07:45' }];
+                 if (layoutRes.ok) {
+                    const savedLayout = await layoutRes.json();
+                    setDayStructure(savedLayout && savedLayout.length > 0 ? savedLayout : defaultLayout);
+                } else {
+                    setDayStructure(defaultLayout);
+                }
 
             } catch (e) {
                 setError(e.message);
@@ -79,28 +85,17 @@ const EksporJadwal = () => {
 
     // Fetch pratinjau untuk mode DAFTAR (ketika filter berubah)
     useEffect(() => {
-        if (viewMode !== 'list') return;
-        const fetchPreview = async () => {
-            if (loadingFilters) return;
-            setLoadingPreview(true);
-            const params = new URLSearchParams();
-            if (debouncedGuru) params.append('guru', debouncedGuru);
-            if (debouncedKelas) params.append('kelas', debouncedKelas);
-            if (debouncedHari) params.append('hari', debouncedHari);
-            const previewUrl = `http://localhost:3001/api/export/preview?${params.toString()}`;
-            try {
-                const response = await fetch(previewUrl);
-                if (!response.ok) throw new Error('Gagal memuat pratinjau.');
-                setPreviewData(await response.json());
-            } catch (e) {
-                setError(e.message);
-                setPreviewData([]);
-            } finally {
-                setLoadingPreview(false);
-            }
-        };
-        fetchPreview();
-    }, [debouncedGuru, debouncedKelas, debouncedHari, loadingFilters, viewMode]);
+        if (viewMode !== 'list' || loadingFilters) return;
+        
+        // Filter dilakukan di frontend, tidak perlu panggil API lagi
+        const filtered = allJadwal.filter(j =>
+            (!debouncedGuru || j.nama_guru === debouncedGuru) &&
+            (!debouncedKelas || j.nama_kelas === debouncedKelas) &&
+            (!debouncedHari || j.hari === debouncedHari)
+        );
+        setPreviewData(filtered);
+
+    }, [debouncedGuru, debouncedKelas, debouncedHari, loadingFilters, viewMode, allJadwal]);
 
     const handleExport = () => {
         const input = pdfPreviewRef.current;
@@ -119,9 +114,9 @@ const EksporJadwal = () => {
             const ratio = canvas.width / canvas.height;
             let imgWidth = pdfWidth - 20;
             let imgHeight = imgWidth / ratio;
-            if (imgHeight > pdfHeight) { // Cek jika tinggi melebihi tinggi PDF
-                 imgHeight = pdfHeight - 20;
-                 imgWidth = imgHeight * ratio;
+            if (imgHeight > pdfHeight - 20) {
+                imgHeight = pdfHeight - 20;
+                imgWidth = imgHeight * ratio;
             }
             pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
             pdf.save(`jadwal-${viewMode}.pdf`);
@@ -140,7 +135,8 @@ const EksporJadwal = () => {
     
     const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
 
-    if (loadingFilters) return <div className="loading-container">Loading filters...</div>;
+    if (loadingFilters) return <div className="loading-container">Memuat filter...</div>;
+    if (error) return <div className="error-container">Error: {error}</div>;
     
     return (
         <div className="ekspor-jadwal-container">
@@ -187,7 +183,6 @@ const EksporJadwal = () => {
             )}
             
             <div className="preview-container">
-                {error && <p className="error-message">Error: {error}</p>}
                 {loadingPreview && <p>Memuat pratinjau...</p>}
                 
                 <div ref={pdfPreviewRef}>
