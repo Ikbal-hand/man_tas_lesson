@@ -5,7 +5,7 @@
 </div>
 <br>
 
-[span_0](start_span)[span_1](start_span)Sebuah aplikasi web yang dirancang untuk memonitoring aktivitas mengajar guru secara *real-time* di MAN 2 Tasikmalaya, serta menyediakan fitur manajemen jadwal yang komprehensif untuk Waka Kurikulum dan manajemen data master untuk Staf TU.[span_0](end_span)[span_1](end_span)
+Sebuah aplikasi web yang dirancang untuk memonitoring aktivitas mengajar guru secara *real-time* di MAN 2 Tasikmalaya, serta menyediakan fitur manajemen jadwal yang komprehensif untuk Waka Kurikulum dan manajemen data master untuk Staf TU.
 
 ## Tampilan Aplikasi
 
@@ -19,17 +19,17 @@ Berikut adalah beberapa cuplikan tampilan dari aplikasi:
 
 ## Fitur Utama
 
-[span_2](start_span)Aplikasi ini memiliki fungsionalitas yang terpisah berdasarkan tiga peran utama: **Staf TU**, **Waka Kurikulum**, dan **Kepala Sekolah**.[span_2](end_span)
+Aplikasi ini memiliki fungsionalitas yang terpisah berdasarkan tiga peran utama: **Staf TU**, **Waka Kurikulum**, dan **Kepala Sekolah**.[span_2](end_span)
 
 ### 👤 **Staf TU (Administrator)**
-[span_3](start_span)Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi.[span_3](end_span)
-- **[span_4](start_span)Manajemen Data Guru** (Tambah, Edit, Hapus, Cari)[span_4](end_span)
-- **[span_5](start_span)Manajemen Data Mata Pelajaran** (Tambah, Edit, Hapus, Cari)[span_5](end_span)
-- **[span_6](start_span)Manajemen Data Kelas** (Tambah, Edit, Hapus, Cari, Filter per Tingkat)[span_6](end_span)
-- **[span_7](start_span)Manajemen Akun Pengguna** (Tambah, Edit, Hapus, Cari)[span_7](end_span)
+Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi.
+- **Manajemen Data Guru** (Tambah, Edit, Hapus, Cari)
+- **Manajemen Data Mata Pelajaran** (Tambah, Edit, Hapus, Cari)
+- **Manajemen Data Kelas** (Tambah, Edit, Hapus, Cari, Filter per Tingkat)
+- **Manajemen Akun Pengguna** (Tambah, Edit, Hapus, Cari)
 - **Manajemen Penugasan Guru** (Menghubungkan Guru dengan Mata Pelajaran yang diampu)
-- **[span_8](start_span)Unggah Data Massal** dari file Excel untuk data guru dan mata pelajaran.[span_8](end_span)
-- **[span_9](start_span)Ekspor Jadwal** ke dalam format PDF dengan berbagai opsi tampilan.[span_9](end_span)
+- **Unggah Data Massal** dari file Excel untuk data guru dan mata pelajaran.
+- **Ekspor Jadwal** ke dalam format PDF dengan berbagai opsi tampilan.
 
 ### 👩‍🏫 **Waka Kurikulum (Moderator)**
 [span_10](start_span)Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran.[span_10](end_span)
