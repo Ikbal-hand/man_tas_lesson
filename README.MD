@@ -13,6 +13,7 @@ Berikut adalah beberapa cuplikan tampilan dari aplikasi:
 
 | Dashboard Kepala Sekolah | Kelola Jadwal (Waka Kurikulum) | Manajemen Data (Staf TU) |
 | :---: | :---: | :---: |
+
 | ![Dashboard Kepala Sekolah](frontend/src/assets/monitoringRealtime.png) | ![Kelola Jadwal](frontend/src/assets/kelolaJadwal.png) | ![Manajemen Data](frontend/src/assets/kelolaData.png) |
 
 ---
