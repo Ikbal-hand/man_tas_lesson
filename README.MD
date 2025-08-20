@@ -5,7 +5,7 @@
 </div>
 <br>
 
-Sebuah aplikasi web yang dirancang untuk memonitoring aktivitas mengajar guru secara *real-time* di MAN 2 Tasikmalaya, serta menyediakan fitur manajemen jadwal yang komprehensif untuk Waka Kurikulum dan manajemen data master untuk Staf TU. [cite: 2, 3, 25]
+Sebuah aplikasi web yang dirancang untuk memonitoring aktivitas mengajar guru secara *real-time* di MAN 2 Tasikmalaya, serta menyediakan fitur manajemen jadwal yang komprehensif untuk Waka Kurikulum dan manajemen data master untuk Staf TU.
 
 ## Tampilan Aplikasi
 
@@ -13,40 +13,40 @@ Berikut adalah beberapa cuplikan tampilan dari aplikasi:
 
 | Dashboard Kepala Sekolah | Kelola Jadwal (Waka Kurikulum) | Manajemen Data (Staf TU) |
 | :---: | :---: | :---: |
-| ![Dashboard Kepala Sekolah](image_d80c09.png) | ![Kelola Jadwal](image_fd1d7f.png) | ![Manajemen Data](image_0bfbd6.png) |
+| ![Dashboard Kepala Sekolah](frontend/src/assets/monitoringRealtime.png) | ![Kelola Jadwal](frontend/src/assets/kelolaJadwal.png) | ![Manajemen Data](frontend/src/assets/kelolaData.png) |
 
 ---
 
 ## Fitur Utama
 
-Aplikasi ini memiliki fungsionalitas yang terpisah berdasarkan tiga peran utama: **Staf TU**, **Waka Kurikulum**, dan **Kepala Sekolah**. [cite: 27]
+Aplikasi ini memiliki fungsionalitas yang terpisah berdasarkan tiga peran utama: **Staf TU**, **Waka Kurikulum**, dan **Kepala Sekolah**.
 
 ### 👤 **Staf TU (Administrator)**
-Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi. [cite: 57]
-- **Manajemen Data Guru** (Tambah, Edit, Hapus, Cari) [cite: 60]
-- **Manajemen Data Mata Pelajaran** (Tambah, Edit, Hapus, Cari) [cite: 60]
-- **Manajemen Data Kelas** (Tambah, Edit, Hapus, Cari, Filter per Tingkat) [cite: 60]
-- **Manajemen Akun Pengguna** (Tambah, Edit, Hapus, Cari) [cite: 60]
+Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi.
+- **Manajemen Data Guru** (Tambah, Edit, Hapus, Cari)
+- **Manajemen Data Mata Pelajaran** (Tambah, Edit, Hapus, Cari)
+- **Manajemen Data Kelas** (Tambah, Edit, Hapus, Cari, Filter per Tingkat)
+- **Manajemen Akun Pengguna** (Tambah, Edit, Hapus, Cari)
 - **Manajemen Penugasan Guru** (Menghubungkan Guru dengan Mata Pelajaran yang diampu)
-- **Unggah Data Massal** dari file Excel untuk data guru dan mata pelajaran. [cite: 60]
-- **Ekspor Jadwal** ke dalam format PDF dengan berbagai opsi tampilan. [cite: 60]
+- **Unggah Data Massal** dari file Excel untuk data guru dan mata pelajaran.
+- **Ekspor Jadwal** ke dalam format PDF dengan berbagai opsi tampilan.
 
 ### 👩‍🏫 **Waka Kurikulum (Moderator)**
-Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran. [cite: 57]
+Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran.
 - **Manajemen Multi-Jadwal** per Tahun Ajaran.
 - **Kelola Jadwal Interaktif** dengan *drag-and-drop*.
 - **Mode Pratinjau & Edit** untuk keamanan dan kemudahan penggunaan.
 - **Simpan Tata Letak Jadwal** (urutan baris & waktu kustom) per tahun ajaran.
 - **Fitur "Kosongkan Jadwal"** per kelas untuk pembersihan cepat.
-- **Deteksi Konflik Jadwal** untuk mengidentifikasi jadwal yang tumpang tindih. [cite: 64]
+- **Deteksi Konflik Jadwal** untuk mengidentifikasi jadwal yang tumpang tindih.
 - **Manajemen Penugasan** untuk mengatur guru mana yang mengajar mata pelajaran apa.
 
 ### 👨‍💼 **Kepala Sekolah (Monitoring)**
-Menggunakan aplikasi untuk kebutuhan monitoring guru dan jadwal secara keseluruhan. [cite: 57]
-- **Dashboard Monitoring Real-time** untuk melihat guru yang sedang mengajar saat ini. [cite: 64]
+Menggunakan aplikasi untuk kebutuhan monitoring guru dan jadwal secara keseluruhan.
+- **Dashboard Monitoring Real-time** untuk melihat guru yang sedang mengajar saat ini.
 - **Widget Hitung Mundur** untuk jadwal pelajaran berikutnya.
-- **Melihat Jadwal Pelajaran** dengan tampilan daftar yang mudah dibaca dan difilter. [cite: 64]
-- **Melihat Riwayat Jadwal** (fitur yang dapat dikembangkan lebih lanjut). [cite: 64]
+- **Melihat Jadwal Pelajaran** dengan tampilan daftar yang mudah dibaca dan difilter.
+- **Melihat Riwayat Jadwal** (fitur yang dapat dikembangkan lebih lanjut).
 
 ---
 
@@ -106,4 +106,5 @@ Aplikasi frontend akan berjalan di `http://localhost:3000` (atau port lain yang 
 ## Kontributor
 
 Proyek ini dirancang dan dikembangkan oleh:
-* **Muhamad Ikbal Handini** - *Program Studi Informatika, Sekolah Tinggi Teknologi Cipasung* [cite: 5, 6]
+* **Muhamad Ikbal Handini** - *Program Studi Informatika, Sekolah Tinggi Teknologi Cipasung*
+
