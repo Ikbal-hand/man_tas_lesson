@@ -19,7 +19,7 @@ Berikut adalah beberapa cuplikan tampilan dari aplikasi:
 
 ## Fitur Utama
 
-Aplikasi ini memiliki fungsionalitas yang terpisah berdasarkan tiga peran utama: **Staf TU**, **Waka Kurikulum**, dan **Kepala Sekolah**.[span_2](end_span)
+Aplikasi ini memiliki fungsionalitas yang terpisah berdasarkan tiga peran utama: **Staf TU**, **Waka Kurikulum**, dan **Kepala Sekolah**.
 
 ### 👤 **Staf TU (Administrator)**
 Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi.
@@ -32,21 +32,21 @@ Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi.
 - **Ekspor Jadwal** ke dalam format PDF dengan berbagai opsi tampilan.
 
 ### 👩‍🏫 **Waka Kurikulum (Moderator)**
-[span_10](start_span)Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran.[span_10](end_span)
+[span_10](start_span)Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran.
 - **Manajemen Multi-Jadwal** per Tahun Ajaran.
 - **Kelola Jadwal Interaktif** dengan *drag-and-drop*.
 - **Mode Pratinjau & Edit** untuk keamanan dan kemudahan penggunaan.
 - **Simpan Tata Letak Jadwal** (urutan baris & waktu kustom) per tahun ajaran.
 - **Fitur "Kosongkan Jadwal"** per kelas untuk pembersihan cepat.
-- **[span_11](start_span)Deteksi Konflik Jadwal** untuk mengidentifikasi jadwal yang tumpang tindih.[span_11](end_span)
+- **Deteksi Konflik Jadwal** untuk mengidentifikasi jadwal yang tumpang tindih.
 - **Manajemen Penugasan** untuk mengatur guru mana yang mengajar mata pelajaran apa.
 
 ### 👨‍💼 **Kepala Sekolah (Monitoring)**
-[span_12](start_span)Menggunakan aplikasi untuk kebutuhan monitoring guru dan jadwal secara keseluruhan.[span_12](end_span)
-- **[span_13](start_span)Dashboard Monitoring Real-time** untuk melihat guru yang sedang mengajar saat ini.[span_13](end_span)
+Menggunakan aplikasi untuk kebutuhan monitoring guru dan jadwal secara keseluruhan.
+- **Dashboard Monitoring Real-time** untuk melihat guru yang sedang mengajar saat ini.
 - **Widget Hitung Mundur** untuk jadwal pelajaran berikutnya.
-- **[span_14](start_span)Melihat Jadwal Pelajaran** dengan tampilan daftar yang mudah dibaca dan difilter.[span_14](end_span)
-- **[span_15](start_span)Melihat Riwayat Jadwal** (fitur yang dapat dikembangkan lebih lanjut).[span_15](end_span)
+- **Melihat Jadwal Pelajaran** dengan tampilan daftar yang mudah dibaca dan difilter.
+- **Melihat Riwayat Jadwal** (fitur yang dapat dikembangkan lebih lanjut).
 
 ---
 
@@ -106,5 +106,5 @@ Aplikasi frontend akan berjalan di `http://localhost:3000` (atau port lain yang 
 ## Kontributor
 
 Proyek ini dirancang dan dikembangkan oleh:
-* **[span_16](start_span)Muhamad Ikbal Handini** - *Program Studi Informatika, Sekolah Tinggi Teknologi Cipasung*[span_16](end_span)
+* **Muhamad Ikbal Handini** - *Program Studi Informatika, Sekolah Tinggi Teknologi Cipasung*
 
