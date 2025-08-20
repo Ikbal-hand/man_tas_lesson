@@ -32,7 +32,7 @@ Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi.
 - **Ekspor Jadwal** ke dalam format PDF dengan berbagai opsi tampilan.
 
 ### 👩‍🏫 **Waka Kurikulum (Moderator)**
-[span_10](start_span)Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran.
+Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran.
 - **Manajemen Multi-Jadwal** per Tahun Ajaran.
 - **Kelola Jadwal Interaktif** dengan *drag-and-drop*.
 - **Mode Pratinjau & Edit** untuk keamanan dan kemudahan penggunaan.
