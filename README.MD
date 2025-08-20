@@ -1,40 +1,110 @@
-# 🏫 Sistem Monitoring Guru MAN 2 TASIKMALAYA
+# Sistem Monitoring Guru - MAN 2 Tasikmalaya
 
-### Deskripsi Proyek
-Sistem Monitoring Guru adalah aplikasi web yang dirancang untuk membantu pihak sekolah dalam mengelola dan memantau kegiatan belajar mengajar. Aplikasi ini berfokus pada manajemen data guru, mata pelajaran, kelas, serta penjadwalan. Fitur utamanya adalah pemantauan real-time guru yang sedang mengajar, manajemen jadwal, dan ekspor data yang efisien.
+<div align="center">
+  <img src="frontend/src/assets/image.png" alt="Logo MAN 2 Tasikmalaya" width="120px"/>
+</div>
+<br>
 
-### Fitur Utama
+[span_0](start_span)[span_1](start_span)Sebuah aplikasi web yang dirancang untuk memonitoring aktivitas mengajar guru secara *real-time* di MAN 2 Tasikmalaya, serta menyediakan fitur manajemen jadwal yang komprehensif untuk Waka Kurikulum dan manajemen data master untuk Staf TU.[span_0](end_span)[span_1](end_span)
 
-Aplikasi ini dibagi menjadi beberapa peran pengguna dengan fungsionalitas khusus:
+## Tampilan Aplikasi
 
-**1. Staf TU**
-* **Manajemen Data Master**: Mengelola data guru, mata pelajaran, dan kelas (tambah, edit, hapus, lihat).
-* **Manajemen Akun**: Membuat, mengedit, dan menghapus akun pengguna dengan peran yang berbeda.
-* **Unggah Data**: Memasukkan data master secara massal menggunakan file Excel.
-* **Ekspor Jadwal**: Mengunduh jadwal pelajaran dalam format Excel dengan filter kustom.
+Berikut adalah beberapa cuplikan tampilan dari aplikasi:
 
-**2. Waka Kurikulum**
-* **Manajemen Jadwal**: Membuat, mengedit, dan menghapus jadwal pelajaran.
-* **Deteksi Konflik**: Melihat dan menyelesaikan konflik jadwal mengajar.
+| Dashboard Kepala Sekolah | Kelola Jadwal (Waka Kurikulum) | Manajemen Data (Staf TU) |
+| :---: | :---: | :---: |
+| ![Dashboard Kepala Sekolah](image_d80c09.png) | ![Kelola Jadwal](image_fd1d7f.png) | ![Manajemen Data](image_0bfbd6.png) |
 
-**3. Kepala Sekolah**
-* **Monitoring Real-time**: Melihat guru yang sedang mengajar di kelas secara langsung.
-* **Melihat Jadwal**: Menampilkan jadwal pelajaran secara keseluruhan.
-* **Riwayat Jadwal**: Melihat riwayat jadwal mengajar.
+---
 
-### Teknologi
+## Fitur Utama
 
-Proyek ini dibangun dengan pendekatan monorepo yang memisahkan frontend dan backend:
+[span_2](start_span)Aplikasi ini memiliki fungsionalitas yang terpisah berdasarkan tiga peran utama: **Staf TU**, **Waka Kurikulum**, dan **Kepala Sekolah**.[span_2](end_span)
 
--   **Frontend**: `React.js`
--   **Backend**: `Express.js`
--   **Database**: `MySQL`
+### 👤 **Staf TU (Administrator)**
+[span_3](start_span)Bertanggung jawab atas pengelolaan semua data master di dalam aplikasi.[span_3](end_span)
+- **[span_4](start_span)Manajemen Data Guru** (Tambah, Edit, Hapus, Cari)[span_4](end_span)
+- **[span_5](start_span)Manajemen Data Mata Pelajaran** (Tambah, Edit, Hapus, Cari)[span_5](end_span)
+- **[span_6](start_span)Manajemen Data Kelas** (Tambah, Edit, Hapus, Cari, Filter per Tingkat)[span_6](end_span)
+- **[span_7](start_span)Manajemen Akun Pengguna** (Tambah, Edit, Hapus, Cari)[span_7](end_span)
+- **Manajemen Penugasan Guru** (Menghubungkan Guru dengan Mata Pelajaran yang diampu)
+- **[span_8](start_span)Unggah Data Massal** dari file Excel untuk data guru dan mata pelajaran.[span_8](end_span)
+- **[span_9](start_span)Ekspor Jadwal** ke dalam format PDF dengan berbagai opsi tampilan.[span_9](end_span)
 
-### Instalasi
+### 👩‍🏫 **Waka Kurikulum (Moderator)**
+[span_10](start_span)Bertanggung jawab penuh atas pembuatan dan pengelolaan jadwal pelajaran.[span_10](end_span)
+- **Manajemen Multi-Jadwal** per Tahun Ajaran.
+- **Kelola Jadwal Interaktif** dengan *drag-and-drop*.
+- **Mode Pratinjau & Edit** untuk keamanan dan kemudahan penggunaan.
+- **Simpan Tata Letak Jadwal** (urutan baris & waktu kustom) per tahun ajaran.
+- **Fitur "Kosongkan Jadwal"** per kelas untuk pembersihan cepat.
+- **[span_11](start_span)Deteksi Konflik Jadwal** untuk mengidentifikasi jadwal yang tumpang tindih.[span_11](end_span)
+- **Manajemen Penugasan** untuk mengatur guru mana yang mengajar mata pelajaran apa.
 
-Untuk menjalankan proyek ini di lingkungan lokal Anda, ikuti langkah-langkah berikut:
+### 👨‍💼 **Kepala Sekolah (Monitoring)**
+[span_12](start_span)Menggunakan aplikasi untuk kebutuhan monitoring guru dan jadwal secara keseluruhan.[span_12](end_span)
+- **[span_13](start_span)Dashboard Monitoring Real-time** untuk melihat guru yang sedang mengajar saat ini.[span_13](end_span)
+- **Widget Hitung Mundur** untuk jadwal pelajaran berikutnya.
+- **[span_14](start_span)Melihat Jadwal Pelajaran** dengan tampilan daftar yang mudah dibaca dan difilter.[span_14](end_span)
+- **[span_15](start_span)Melihat Riwayat Jadwal** (fitur yang dapat dikembangkan lebih lanjut).[span_15](end_span)
 
-**1. Clone Repositori**
+---
+
+## Teknologi yang Digunakan
+
+| Kategori | Teknologi |
+| :--- | :--- |
+| **Frontend** | React, React Router, dnd-kit, jsPDF, html2canvas, react-icons |
+| **Backend** | Node.js, Express.js, MySQL2 |
+| **Database** | MySQL |
+| **Development**| Vite, Nodemon |
+
+---
+
+## Instalasi & Menjalankan Proyek
+
+Untuk menjalankan proyek ini di lingkungan lokal, ikuti langkah-langkah berikut:
+
+### Prasyarat
+- Node.js (v18 atau lebih baru)
+- MySQL Server
+
+### 1. Backend Setup
 ```bash
-git clone [https://github.com/nama-pengguna/nama-repo.git](https://github.com/nama-pengguna/nama-repo.git)
-cd nama-repo
+# 1. Masuk ke direktori backend
+cd backend
+
+# 2. Instal semua dependensi yang dibutuhkan
+npm install
+
+# 3. Buat database MySQL dengan nama 'lesson_manager' (atau sesuai konfigurasi Anda)
+
+# 4. Import semua file .sql atau buat tabel secara manual sesuai skema yang ada
+
+# 5. Buat file .env untuk konfigurasi database jika diperlukan
+
+# 6. Jalankan server backend
+nodemon server.js
+```
+Server backend akan berjalan di `http://localhost:3001`.
+
+### 2. Frontend Setup
+```bash
+# 1. Buka terminal baru dan masuk ke direktori frontend
+cd frontend
+
+# 2. Instal semua dependensi yang dibutuhkan
+npm install
+
+# 3. Jalankan server development frontend
+npm run dev
+```
+Aplikasi frontend akan berjalan di `http://localhost:3000` (atau port lain yang tersedia).
+
+---
+
+## Kontributor
+
+Proyek ini dirancang dan dikembangkan oleh:
+* **[span_16](start_span)Muhamad Ikbal Handini** - *Program Studi Informatika, Sekolah Tinggi Teknologi Cipasung*[span_16](end_span)
+
